@@ -1,9 +1,12 @@
 [
-    {
-        "data": "test"
-    },
-    {
-        "data2": "test"
-    }
-    
+  {
+    "title" : "First Todo",
+    "isCompleted" : false,
+    "id" : "77D0A455-0BAD-496B-9A1F-53B687AC3B1C"
+  },
+  {
+    "title" : "Second Todo",
+    "id" : "4CE06427-09D8-4311-80CC-89F1D4E1147E",
+    "isCompleted" : false
+  }
 ]

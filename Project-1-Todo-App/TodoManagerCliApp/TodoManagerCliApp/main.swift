@@ -45,38 +45,102 @@ final class JSONFileManagerCache: Cache {
     
     func save(todos: [Todo]) {
         
+        do {
+            
+            if let jsonData = encodeTodos(todos: todos) {
+                
+                if let jsonString = String(data: jsonData, encoding: .utf8) {
+                    print(jsonString)
+                }
+                
+                try jsonData.write(to: self.fileURL)
+                
+                print("Successfully wrote todos to file: \(jsonData)")
+            }
+        }
+        
+        catch {
+            print("error saving todos: \(error.localizedDescription)")
+        }
+    }
+    
+    func encodeTodos(todos: [Todo]) -> Data? {
+        do {
+            let encoder = JSONEncoder()
+            
+            encoder.outputFormatting = .prettyPrinted
+            
+            let jsonData = try encoder.encode(todos)
+            
+            if let jsonString = String(data: jsonData, encoding: .utf8) {
+                print(jsonString)
+            }
+            return jsonData
+        }
+        catch {
+            print("error encoding: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    func decodeTodos(data: Data) -> [Todo]? {
+        do {
+            let decoder = JSONDecoder()
+            let todos = try decoder.decode([Todo].self, from: data)
+            return todos
+        }
+        
+        catch {
+            print("error decoding todos: \(error.localizedDescription)")
+        }
+    }
+    
+    func writeDemoTodos(demoTodos: [Todo]) {
+        do {
+            
+            if let jsonData = encodeTodos(todos: demoTodos) {
+                if let jsonString = String(data: jsonData, encoding: .utf8) {
+                    print(jsonString)
+                }
+                try jsonData.write(to: self.fileURL)
+            }
+        }
+        catch {
+            print("error: \(error.localizedDescription)")
+        }
     }
     
     func load() -> [Todo]? {
         
         var fileData: Data
-//        var jsonData: [String: Any]
-//        var jsonData: Any
-        var jsonData: [Any]
+        var jsonDataArray: [[String: Any]]
         
-        do  {
+        do {
             print("File url: \(fileURL)")
             let data = try Data(contentsOf: fileURL)
-            print(data.base64EncodedString())
             fileData = data
-        } catch {
-            print("Error fetching data from file: \(error.localizedDescription)")
-            return []
+        } 
+        
+        catch {
+            print("error fetching data from file: \(error.localizedDescription)")
+            return nil
         }
         
         do {
-            let json = try JSONSerialization.jsonObject(with: fileData, options: [])
-            print(json)
-            jsonData = json as! [Any]
-            print(jsonData)
-            for item in jsonData {
-                print(item)
+            
+            if let jsonArray = try JSONSerialization.jsonObject(with: fileData, options: []) as? [[String: Any]] {
+                
+                print("json array: \(jsonArray)")
+                
+                jsonDataArray = jsonArray
+                
             }
-        } catch {
-            print("Error serializing data as json: \(error.localizedDescription)")
         }
-    
-        return []
+        
+        catch {
+            print("error serializing data as json: \(error.localizedDescription)")
+            return nil
+        }
     }
     
 }
@@ -96,6 +160,13 @@ final class InMemoryCache: Cache {
 //// TodoManager class
 
 final class TodoManager {
+    
+    private var todos: [Todo]
+    
+    init(todos: [Todo]) {
+        self.todos = todos
+    }
+    
     func listTodos() {
         
     }
@@ -158,8 +229,13 @@ Enter a command. Your command must be one of the following:
 
 //// Setup and run
 
+let demoTodos = [
+    Todo(id: UUID(), title: "First Todo", isCompleted: false),
+    Todo(id: UUID(), title: "Second Todo", isCompleted: false)
+]
 
 let app = App()
 app.run()
 var jsonCache = JSONFileManagerCache(filename: "data.json")
 jsonCache.load()
+jsonCache.writeDemoTodos(demoTodos: demoTodos)
