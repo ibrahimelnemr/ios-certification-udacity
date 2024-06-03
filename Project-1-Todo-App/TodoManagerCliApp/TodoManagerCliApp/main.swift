@@ -50,12 +50,12 @@ final class JSONFileManagerCache: Cache {
             if let jsonData = encodeTodos(todos: todos) {
                 
                 if let jsonString = String(data: jsonData, encoding: .utf8) {
-                    print(jsonString)
+//                    print(jsonString)
                 }
                 
                 try jsonData.write(to: self.fileURL)
                 
-                print("Successfully wrote todos to file: \(jsonData)")
+                print("Successfully saved todos to file: \(self.filename)")
             }
         }
         
@@ -73,7 +73,7 @@ final class JSONFileManagerCache: Cache {
             let jsonData = try encoder.encode(todos)
             
             if let jsonString = String(data: jsonData, encoding: .utf8) {
-                print(jsonString)
+//                print(jsonString)
             }
             return jsonData
         }
@@ -92,6 +92,7 @@ final class JSONFileManagerCache: Cache {
         
         catch {
             print("error decoding todos: \(error.localizedDescription)")
+            return nil
         }
     }
     
@@ -100,7 +101,7 @@ final class JSONFileManagerCache: Cache {
             
             if let jsonData = encodeTodos(todos: demoTodos) {
                 if let jsonString = String(data: jsonData, encoding: .utf8) {
-                    print(jsonString)
+//                    print(jsonString)
                 }
                 try jsonData.write(to: self.fileURL)
             }
@@ -116,10 +117,10 @@ final class JSONFileManagerCache: Cache {
         var jsonDataArray: [[String: Any]]
         
         do {
-            print("File url: \(fileURL)")
+            print("file url: \(fileURL)")
             let data = try Data(contentsOf: fileURL)
             fileData = data
-        } 
+        }
         
         catch {
             print("error fetching data from file: \(error.localizedDescription)")
@@ -127,13 +128,20 @@ final class JSONFileManagerCache: Cache {
         }
         
         do {
+//            if let jsonArray = try JSONSerialization.jsonObject(with: fileData, options: []) as? [[String: Any]] {
+//                
+//                print("json array: \(jsonArray)")
+//                
+//                jsonDataArray = jsonArray
+//            }
             
-            if let jsonArray = try JSONSerialization.jsonObject(with: fileData, options: []) as? [[String: Any]] {
-                
-                print("json array: \(jsonArray)")
-                
-                jsonDataArray = jsonArray
-                
+            if let decodedJSONData = decodeTodos(data: fileData) {
+                print("JSON cache loaded succesfully.")
+                return decodedJSONData
+            }
+            else {
+                print("error loading json data")
+                return nil
             }
         }
         
@@ -234,8 +242,15 @@ let demoTodos = [
     Todo(id: UUID(), title: "Second Todo", isCompleted: false)
 ]
 
+let demoTodos2 = [
+    Todo(id: UUID(), title: "Third Todo", isCompleted: false)
+]
+
+
+
 let app = App()
 app.run()
 var jsonCache = JSONFileManagerCache(filename: "data.json")
-jsonCache.load()
 jsonCache.writeDemoTodos(demoTodos: demoTodos)
+jsonCache.load()
+jsonCache.save(todos: demoTodos2)
