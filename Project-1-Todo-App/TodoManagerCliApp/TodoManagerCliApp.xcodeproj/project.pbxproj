@@ -25,6 +25,7 @@
 /* Begin PBXFileReference section */
 		0FD6698F2C0DFDD100C8072E /* TodoManagerCliApp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TodoManagerCliApp; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FD669922C0DFDD100C8072E /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		0FD6699A2C0E2AA500C8072E /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				0FD669922C0DFDD100C8072E /* main.swift */,
+				0FD6699A2C0E2AA500C8072E /* data.json */,
 			);
 			path = TodoManagerCliApp;
 			sourceTree = "<group>";

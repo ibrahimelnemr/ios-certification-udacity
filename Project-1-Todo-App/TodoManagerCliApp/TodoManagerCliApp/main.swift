@@ -32,11 +32,50 @@ enum Command: String, CaseIterable {
 //// FileSystemCache class
 
 final class JSONFileManagerCache: Cache {
+    private var filename: String
+    private var fileURL: URL
+    private var todos: [Todo]
+    
+    init(filename: String) {
+        self.filename = filename
+        self.fileURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+            .appendingPathComponent(filename)
+        self.todos = []
+    }
+    
     func save(todos: [Todo]) {
         
     }
     
     func load() -> [Todo]? {
+        
+        var fileData: Data
+//        var jsonData: [String: Any]
+//        var jsonData: Any
+        var jsonData: [Any]
+        
+        do  {
+            print("File url: \(fileURL)")
+            let data = try Data(contentsOf: fileURL)
+            print(data.base64EncodedString())
+            fileData = data
+        } catch {
+            print("Error fetching data from file: \(error.localizedDescription)")
+            return []
+        }
+        
+        do {
+            let json = try JSONSerialization.jsonObject(with: fileData, options: [])
+            print(json)
+            jsonData = json as! [Any]
+            print(jsonData)
+            for item in jsonData {
+                print(item)
+            }
+        } catch {
+            print("Error serializing data as json: \(error.localizedDescription)")
+        }
+    
         return []
     }
     
@@ -94,7 +133,7 @@ final class App {
     func promptForCommand(message: String) -> String {
         print(message)
         print("Enter a command: ")
-        var command = readLine()
+        let command = readLine()
         return command!
     }
     
@@ -108,41 +147,10 @@ Enter a command. Your command must be one of the following:
 - delete
 - exit
 """
-//        print(message)
-//        print("Enter a command: ")
-//        
-//        var itemFound = false
-//        let command = readLine()
-//        guard let commandEntered = command else {
-//            return
-//        }
-        
-        let commandEntered: String
+        var commandEntered: String = promptForCommand(message: message)
         
         while !validateCommand(commandEntered) {
             commandEntered = promptForCommand(message: message)
-        }
-        
-
-        while !itemFound {
-            let command = readLine()
-            
-            
-            
-            print("You entered command: \(commandEntered)")
-            
-            
-            
-            for item in Command.allCases {
-                if commandEntered == item.rawValue {
-                    print("Your input is within the commands")
-                    itemFound = true
-                    break
-                }
-            }
-            if !itemFound {
-                print("Enter a command again, your command was not among those included.")
-            }
         }
         
     }
@@ -150,7 +158,8 @@ Enter a command. Your command must be one of the following:
 
 //// Setup and run
 
-let fileManager = FileManager.default
 
 let app = App()
 app.run()
+var jsonCache = JSONFileManagerCache(filename: "data.json")
+jsonCache.load()
