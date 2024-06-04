@@ -7,7 +7,7 @@ public struct Todo: CustomStringConvertible, Codable {
     var isCompleted: Bool
     public var description: String {
         get {
-            return 
+            return
             """
             \n\t<Todo> 🎯
             \tID: \(id)
@@ -23,6 +23,7 @@ public struct Todo: CustomStringConvertible, Codable {
 public protocol Cache {
     func save(todos: [Todo]) //Persists the given todos.
     func load() -> [Todo]? //Retrieves and returns the saved todos, or nil if none exist.
+    func clear()
 }
 
 //// Command enum
@@ -57,7 +58,7 @@ final class JSONFileManagerCache: Cache {
                 
                 try jsonData.write(to: self.fileURL)
                 
-                print("Successfully saved todos to file: \(self.filename)")
+                //                print("Successfully saved todos to file: \(self.filename)")
             }
         }
         
@@ -75,7 +76,7 @@ final class JSONFileManagerCache: Cache {
             let jsonData = try encoder.encode(todos)
             
             if let jsonString = String(data: jsonData, encoding: .utf8) {
-//                print(jsonString)
+                //                print(jsonString)
             }
             return jsonData
         }
@@ -103,7 +104,7 @@ final class JSONFileManagerCache: Cache {
             
             if let jsonData = encodeTodos(todos: demoTodos) {
                 if let jsonString = String(data: jsonData, encoding: .utf8) {
-//                    print(jsonString)
+                    //                    print(jsonString)
                 }
                 try jsonData.write(to: self.fileURL)
             }
@@ -119,7 +120,7 @@ final class JSONFileManagerCache: Cache {
         var jsonDataArray: [[String: Any]]
         
         do {
-            print("file url: \(fileURL)")
+            //            print("file url: \(fileURL)")
             let data = try Data(contentsOf: fileURL)
             fileData = data
         }
@@ -130,15 +131,8 @@ final class JSONFileManagerCache: Cache {
         }
         
         do {
-//            if let jsonArray = try JSONSerialization.jsonObject(with: fileData, options: []) as? [[String: Any]] {
-//                
-//                print("json array: \(jsonArray)")
-//                
-//                jsonDataArray = jsonArray
-//            }
             
             if let decodedJSONData = decodeTodos(data: fileData) {
-                print("JSON cache loaded succesfully.")
                 return decodedJSONData
             }
             else {
@@ -150,6 +144,20 @@ final class JSONFileManagerCache: Cache {
         catch {
             print("error serializing data as json: \(error.localizedDescription)")
             return nil
+        }
+    }
+    
+    func clear() {
+        do {
+            
+            if let jsonData = encodeTodos(todos: []) {
+                try jsonData.write(to: self.fileURL)
+                print("successfully cleared todos from file cache.")
+            }
+        }
+        
+        catch {
+            print("error saving todos: \(error.localizedDescription)")
         }
     }
     
@@ -170,6 +178,10 @@ final class InMemoryCache: Cache {
     func load() -> [Todo]? {
         return self.todos
     }
+    
+    func clear() {
+        self.todos = []
+    }
 }
 
 //// TodoManager class
@@ -183,48 +195,76 @@ final class TodoManager {
     }
     
     func listTodos() {
+        
         guard let todos = self.cache.load() else {
-            print("could not list todos; error loading todos from cache.")
+            print("error loading todos from cache.")
             return
         }
         
-        for todo in todos {
-            print(todo)
-        }
+        print(todos)
     }
     
     func addTodo(with title: String) {
+        
         var newTodo: Todo = Todo(id: UUID(), title: title, isCompleted: false)
         
-        print(type(of: newTodo))
-        
         guard var todos = self.cache.load() else {
-            print("could not list todos; error loading todos from cache.")
+            print("error loading todos from cache.")
             return
         }
         
-        var newTodos = [newTodo]
+        self.cache.save(todos: todos + [newTodo])
         
-        print("newtodos: \(newTodos)")
-        
-        var updatedTodos: [Todo] = todos + [newTodo]
-        
-        print("updated todos: \(updatedTodos)")
-        self.cache.save(todos: updatedTodos)
     }
     
     func toggleCompletion(forTodoAtIndex index: Int) {
         
+        guard var todos = self.cache.load() else {
+            print("error loading todos from cache.")
+            return
+        }
+        
+        if index >= todos.count {
+            print("error toggling completion: index not valid.")
+            return
+        }
+        
+        var oldTodo = todos.remove(at: index)
+        
+        var newTodo = Todo(id: oldTodo.id,  title: oldTodo.title, isCompleted: !oldTodo.isCompleted)
+        
+        todos.insert(newTodo, at: index)
+        
+        self.cache.save(todos: todos)
+        
     }
     
     func deleteTodo(atIndex index: Int) {
+        guard var todos = self.cache.load() else {
+            print("error loading todos from cache.")
+            return
+        }
         
+        if index >= todos.count {
+            print("error removing todo: index not valid.")
+            return
+        }
+        
+        todos.remove(at: index)
+        
+        self.cache.save(todos: todos)
     }
 }
 
 //// App class
 
 final class App {
+    
+    init(todoManager: TodoManager) {
+        self.todoManager = todoManager
+    }
+    
+    private var todoManager: TodoManager
     
     func validateCommand(_ command: String) -> Bool {
         print("You entered command: \(command)")
@@ -246,6 +286,52 @@ final class App {
         return command!
     }
     
+    func executeCommandFunction(command: String) {
+        
+        switch command {
+        case Command.add.rawValue:
+            print("Enter the name of a Todo to add: ")
+            
+            guard var name = readLine() else { return }
+            
+//            guard let name = readLine() else {
+//                print("could not get name entered. try again.")
+//                return
+//            }
+            
+            todoManager.addTodo(with: name)
+        
+        case Command.list.rawValue:
+            print("Listing todos")
+            todoManager.listTodos()
+            
+        case Command.delete.rawValue:
+            print("Enter the index of a todo to delete: ")
+            
+            guard let rawIndex = readLine(), let index = Int(rawIndex) else {
+                print("invalid index entered. try again.")
+                return
+            }
+            
+            todoManager.deleteTodo(atIndex: index)
+            
+        case Command.toggle.rawValue:
+            print("Enter the index of a todo to toggle completion of: ")
+            
+            guard let rawIndex = readLine(), let index = Int(rawIndex) else {
+                print("invalid index entered. try again.")
+                return
+            }
+            
+        case Command.exit.rawValue:
+            print("Exiting")
+            
+        default:
+            print("The command you entered was not a valid one, try again.")
+            
+        }
+    }
+    
     func run() {
         
         let message = """
@@ -258,9 +344,26 @@ Enter a command. Your command must be one of the following:
 """
         var commandEntered: String = promptForCommand(message: message)
         
-        while !validateCommand(commandEntered) {
+        var running = true
+        
+        while (running) {
+            
+            executeCommandFunction(command: commandEntered)
+            
             commandEntered = promptForCommand(message: message)
+            
+            if !validateCommand(commandEntered) {
+                commandEntered = promptForCommand(message: message)
+            }
+            
+            if (commandEntered) == Command.exit.rawValue {
+                executeCommandFunction(command: commandEntered)
+                running = false
+            }
+            
         }
+        
+        
         
     }
 }
@@ -276,14 +379,29 @@ let demoTodos2 = [
     Todo(id: UUID(), title: "Third Todo", isCompleted: false)
 ]
 
-
-
-let app = App()
-app.run()
 var jsonCache = JSONFileManagerCache(filename: "data.json")
+jsonCache.clear()
+
 var memoryCache = InMemoryCache()
+memoryCache.clear()
 
 let todoManager = TodoManager(cache: jsonCache)
 
+let app = App(todoManager: todoManager)
+app.run()
+
+
+print("listing todos")
+todoManager.listTodos()
+
 print("writing new todo")
 todoManager.addTodo(with: "demo task")
+todoManager.listTodos()
+
+print("toggling completion at index 0")
+todoManager.toggleCompletion(forTodoAtIndex: 0)
+todoManager.listTodos()
+
+print("deleting todo at index 0")
+todoManager.deleteTodo(atIndex: 0)
+todoManager.listTodos()
