@@ -204,6 +204,16 @@ final class TodoManager {
         print(todos)
     }
     
+    func getTodos() -> [Todo]? {
+        
+        guard let todos = self.cache.load() else {
+            print("error loading todos from cache.")
+            return nil
+        }
+        
+        return todos
+    }
+    
     func addTodo(with title: String) {
         
         var newTodo: Todo = Todo(id: UUID(), title: title, isCompleted: false)
@@ -229,11 +239,7 @@ final class TodoManager {
             return
         }
         
-        var oldTodo = todos.remove(at: index)
-        
-        var newTodo = Todo(id: oldTodo.id,  title: oldTodo.title, isCompleted: !oldTodo.isCompleted)
-        
-        todos.insert(newTodo, at: index)
+        todos[index].isCompleted = !todos[index].isCompleted
         
         self.cache.save(todos: todos)
         
@@ -308,6 +314,16 @@ final class App {
         case Command.delete.rawValue:
             print("Enter the index of a todo to delete: ")
             
+            guard let todos = todoManager.getTodos() else {
+                print("error retrieving todos to show available indexes")
+                return
+            }
+            
+            print("Available indexes: ")
+            for (idx, todo) in todos.enumerated() {
+                print("\t \(idx) \(todo.title)")
+            }
+            
             guard let rawIndex = readLine(), let index = Int(rawIndex) else {
                 print("invalid index entered. try again.")
                 return
@@ -318,10 +334,23 @@ final class App {
         case Command.toggle.rawValue:
             print("Enter the index of a todo to toggle completion of: ")
             
+            
+            guard let todos = todoManager.getTodos() else {
+                print("error retrieving todos to show available indexes")
+                return
+            }
+            
+            print("Available indexes: ")
+            for (idx, todo) in todos.enumerated() {
+                print("\t \(idx) \(todo.title)")
+            }
+            
             guard let rawIndex = readLine(), let index = Int(rawIndex) else {
                 print("invalid index entered. try again.")
                 return
             }
+            
+            todoManager.toggleCompletion(forTodoAtIndex: index)
             
         case Command.exit.rawValue:
             print("Exiting")
@@ -336,13 +365,13 @@ final class App {
         
         let message = """
 Enter a command. Your command must be one of the following:
-- add
-- list
-- toggle
-- delete
-- exit
+🔖\tadd
+📋\tlist
+📌\ttoggle
+❌\tdelete
+⬅️\texit
 """
-        var commandEntered: String = promptForCommand(message: message)
+        var commandEntered: String = ""
         
         var running = true
         
@@ -370,38 +399,40 @@ Enter a command. Your command must be one of the following:
 
 //// Setup and run
 
-let demoTodos = [
-    Todo(id: UUID(), title: "First Todo", isCompleted: false),
-    Todo(id: UUID(), title: "Second Todo", isCompleted: false)
-]
+//let demoTodos = [
+//    Todo(id: UUID(), title: "First Todo", isCompleted: false),
+//    Todo(id: UUID(), title: "Second Todo", isCompleted: false)
+//]
+//
+//let demoTodos2 = [
+//    Todo(id: UUID(), title: "Third Todo", isCompleted: false)
+//]
 
-let demoTodos2 = [
-    Todo(id: UUID(), title: "Third Todo", isCompleted: false)
-]
+//
+//var memoryCache = InMemoryCache()
+//memoryCache.clear()
+
 
 var jsonCache = JSONFileManagerCache(filename: "data.json")
 jsonCache.clear()
-
-var memoryCache = InMemoryCache()
-memoryCache.clear()
 
 let todoManager = TodoManager(cache: jsonCache)
 
 let app = App(todoManager: todoManager)
 app.run()
 
-
-print("listing todos")
-todoManager.listTodos()
-
-print("writing new todo")
-todoManager.addTodo(with: "demo task")
-todoManager.listTodos()
-
-print("toggling completion at index 0")
-todoManager.toggleCompletion(forTodoAtIndex: 0)
-todoManager.listTodos()
-
-print("deleting todo at index 0")
-todoManager.deleteTodo(atIndex: 0)
-todoManager.listTodos()
+//
+//print("listing todos")
+//todoManager.listTodos()
+//
+//print("writing new todo")
+//todoManager.addTodo(with: "demo task")
+//todoManager.listTodos()
+//
+//print("toggling completion at index 0")
+//todoManager.toggleCompletion(forTodoAtIndex: 0)
+//todoManager.listTodos()
+//
+//print("deleting todo at index 0")
+//todoManager.deleteTodo(atIndex: 0)
+//todoManager.listTodos()
