@@ -7,7 +7,13 @@ public struct Todo: CustomStringConvertible, Codable {
     var isCompleted: Bool
     public var description: String {
         get {
-            return "todo"
+            return 
+            """
+            \n\t<Todo> 🎯
+            \tID: \(id)
+            \tTitle: \(title)
+            \tisCompleted: \(isCompleted)\n
+            """
         }
     }
 }
@@ -48,10 +54,6 @@ final class JSONFileManagerCache: Cache {
         do {
             
             if let jsonData = encodeTodos(todos: todos) {
-                
-                if let jsonString = String(data: jsonData, encoding: .utf8) {
-//                    print(jsonString)
-                }
                 
                 try jsonData.write(to: self.fileURL)
                 
@@ -156,12 +158,17 @@ final class JSONFileManagerCache: Cache {
 //// InMemoryCache class
 
 final class InMemoryCache: Cache {
+    private var todos: [Todo]
+    
+    init() {
+        self.todos = []
+    }
     func save(todos: [Todo]) {
-        
+        self.todos = todos
     }
     
     func load() -> [Todo]? {
-        return []
+        return self.todos
     }
 }
 
@@ -169,18 +176,41 @@ final class InMemoryCache: Cache {
 
 final class TodoManager {
     
-    private var todos: [Todo]
+    private var cache: Cache
     
-    init(todos: [Todo]) {
-        self.todos = todos
+    init(cache: Cache) {
+        self.cache = cache
     }
     
     func listTodos() {
+        guard let todos = self.cache.load() else {
+            print("could not list todos; error loading todos from cache.")
+            return
+        }
         
+        for todo in todos {
+            print(todo)
+        }
     }
     
     func addTodo(with title: String) {
+        var newTodo: Todo = Todo(id: UUID(), title: title, isCompleted: false)
         
+        print(type(of: newTodo))
+        
+        guard var todos = self.cache.load() else {
+            print("could not list todos; error loading todos from cache.")
+            return
+        }
+        
+        var newTodos = [newTodo]
+        
+        print("newtodos: \(newTodos)")
+        
+        var updatedTodos: [Todo] = todos + [newTodo]
+        
+        print("updated todos: \(updatedTodos)")
+        self.cache.save(todos: updatedTodos)
     }
     
     func toggleCompletion(forTodoAtIndex index: Int) {
@@ -251,6 +281,9 @@ let demoTodos2 = [
 let app = App()
 app.run()
 var jsonCache = JSONFileManagerCache(filename: "data.json")
-jsonCache.writeDemoTodos(demoTodos: demoTodos)
-jsonCache.load()
-jsonCache.save(todos: demoTodos2)
+var memoryCache = InMemoryCache()
+
+let todoManager = TodoManager(cache: jsonCache)
+
+print("writing new todo")
+todoManager.addTodo(with: "demo task")
