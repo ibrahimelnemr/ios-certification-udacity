@@ -9,10 +9,10 @@ public struct Todo: CustomStringConvertible, Codable {
         get {
             return
             """
-            \n\t<Todo> 🎯
+            \n\tTodo 🎯
             \tID: \(id)
             \tTitle: \(title)
-            \tisCompleted: \(isCompleted)\n
+            \tisCompleted: \(isCompleted)\(isCompleted ? "✅" : "❌")\n
             """
         }
     }
@@ -21,8 +21,8 @@ public struct Todo: CustomStringConvertible, Codable {
 //// Cache protocol
 
 public protocol Cache {
-    func save(todos: [Todo]) //Persists the given todos.
-    func load() -> [Todo]? //Retrieves and returns the saved todos, or nil if none exist.
+    func save(todos: [Todo])
+    func load() -> [Todo]?
     func clear()
 }
 
@@ -57,8 +57,6 @@ final class JSONFileManagerCache: Cache {
             if let jsonData = encodeTodos(todos: todos) {
                 
                 try jsonData.write(to: self.fileURL)
-                
-                //                print("Successfully saved todos to file: \(self.filename)")
             }
         }
         
@@ -201,7 +199,9 @@ final class TodoManager {
             return
         }
         
-        print(todos)
+        for todo in todos {
+            print(todo)
+        }
     }
     
     func getTodos() -> [Todo]? {
@@ -277,7 +277,7 @@ final class App {
         
         for item in Command.allCases {
             if command == item.rawValue {
-                print("Your input is within the commands")
+//                print("Your input is within the commands")
                 return true
             }
         }
@@ -299,11 +299,6 @@ final class App {
             print("Enter the name of a Todo to add: ")
             
             guard var name = readLine() else { return }
-            
-//            guard let name = readLine() else {
-//                print("could not get name entered. try again.")
-//                return
-//            }
             
             todoManager.addTodo(with: name)
         
@@ -366,7 +361,7 @@ final class App {
         let message = """
 Enter a command. Your command must be one of the following:
 🔖\tadd
-📋\tlist
+📝\tlist
 📌\ttoggle
 ❌\tdelete
 ⬅️\texit
@@ -397,21 +392,6 @@ Enter a command. Your command must be one of the following:
     }
 }
 
-//// Setup and run
-
-//let demoTodos = [
-//    Todo(id: UUID(), title: "First Todo", isCompleted: false),
-//    Todo(id: UUID(), title: "Second Todo", isCompleted: false)
-//]
-//
-//let demoTodos2 = [
-//    Todo(id: UUID(), title: "Third Todo", isCompleted: false)
-//]
-
-//
-//var memoryCache = InMemoryCache()
-//memoryCache.clear()
-
 
 var jsonCache = JSONFileManagerCache(filename: "data.json")
 jsonCache.clear()
@@ -420,19 +400,3 @@ let todoManager = TodoManager(cache: jsonCache)
 
 let app = App(todoManager: todoManager)
 app.run()
-
-//
-//print("listing todos")
-//todoManager.listTodos()
-//
-//print("writing new todo")
-//todoManager.addTodo(with: "demo task")
-//todoManager.listTodos()
-//
-//print("toggling completion at index 0")
-//todoManager.toggleCompletion(forTodoAtIndex: 0)
-//todoManager.listTodos()
-//
-//print("deleting todo at index 0")
-//todoManager.deleteTodo(atIndex: 0)
-//todoManager.listTodos()
