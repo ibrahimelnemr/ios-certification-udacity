@@ -61,7 +61,7 @@ final class JSONFileManagerCache: Cache {
         }
         
         catch {
-            print("error saving todos: \(error.localizedDescription)")
+            print("\t‼️ Error saving todos: \(error.localizedDescription)")
         }
     }
     
@@ -79,7 +79,7 @@ final class JSONFileManagerCache: Cache {
             return jsonData
         }
         catch {
-            print("error encoding: \(error.localizedDescription)")
+            print("\t‼️ Error encoding: \(error.localizedDescription)")
             return nil
         }
     }
@@ -92,7 +92,7 @@ final class JSONFileManagerCache: Cache {
         }
         
         catch {
-            print("error decoding todos: \(error.localizedDescription)")
+            print("\t‼️ Error decoding todos: \(error.localizedDescription)")
             return nil
         }
     }
@@ -108,7 +108,7 @@ final class JSONFileManagerCache: Cache {
             }
         }
         catch {
-            print("error: \(error.localizedDescription)")
+            print("\t‼️ Error: \(error.localizedDescription)")
         }
     }
     
@@ -124,7 +124,7 @@ final class JSONFileManagerCache: Cache {
         }
         
         catch {
-            print("error fetching data from file: \(error.localizedDescription)")
+            print("\t‼️ Error fetching data from file: \(error.localizedDescription)")
             return nil
         }
         
@@ -134,7 +134,7 @@ final class JSONFileManagerCache: Cache {
                 return decodedJSONData
             }
             else {
-                print("error loading json data")
+                print("\t‼️ Error loading json data")
                 return nil
             }
         }
@@ -150,12 +150,12 @@ final class JSONFileManagerCache: Cache {
             
             if let jsonData = encodeTodos(todos: []) {
                 try jsonData.write(to: self.fileURL)
-                print("successfully cleared todos from file cache.")
+//                print("successfully cleared todos from file cache.")
             }
         }
         
         catch {
-            print("error saving todos: \(error.localizedDescription)")
+            print("\t‼️ Error saving todos: \(error.localizedDescription)")
         }
     }
     
@@ -195,8 +195,12 @@ final class TodoManager {
     func listTodos() {
         
         guard let todos = self.cache.load() else {
-            print("error loading todos from cache.")
+            print("\t‼️ Error loading todos from cache.")
             return
+        }
+        
+        if todos.isEmpty {
+            print("\t❗️ There are currently no todos.")
         }
         
         for todo in todos {
@@ -207,7 +211,7 @@ final class TodoManager {
     func getTodos() -> [Todo]? {
         
         guard let todos = self.cache.load() else {
-            print("error loading todos from cache.")
+            print("\t‼️ Error loading todos from cache.")
             return nil
         }
         
@@ -219,27 +223,34 @@ final class TodoManager {
         var newTodo: Todo = Todo(id: UUID(), title: title, isCompleted: false)
         
         guard var todos = self.cache.load() else {
-            print("error loading todos from cache.")
+            print("\t‼️ Error loading todos from cache.")
             return
         }
         
         self.cache.save(todos: todos + [newTodo])
+        
+        print("✅ Successfully added todo")
+        print(newTodo)
         
     }
     
     func toggleCompletion(forTodoAtIndex index: Int) {
         
         guard var todos = self.cache.load() else {
-            print("error loading todos from cache.")
+            print("\t‼️ Error loading todos from cache.")
             return
         }
         
         if index >= todos.count {
-            print("error toggling completion: index not valid.")
+            print("\t‼️ Error toggling completion: index not valid.")
             return
         }
         
         todos[index].isCompleted = !todos[index].isCompleted
+        
+        print("✅ Successfully toggled completion.")
+        print("Updated todo:")
+        print(todos[index])
         
         self.cache.save(todos: todos)
         
@@ -247,16 +258,24 @@ final class TodoManager {
     
     func deleteTodo(atIndex index: Int) {
         guard var todos = self.cache.load() else {
-            print("error loading todos from cache.")
+            print("\t‼️ Error loading todos from cache.")
             return
         }
         
         if index >= todos.count {
-            print("error removing todo: index not valid.")
+            print("\t‼️ Error removing todo: index not valid.")
             return
         }
+        print()
+        print("\t🔄 Removing todo at index \(index). Current number of todos: \(todos.count)")
+        print()
+        print("\t🗑️ Todo removed: ")
+        print(todos[index])
         
         todos.remove(at: index)
+        
+        print("\t✅ Successfully removed todo at index \(index). Current number of todos: \(todos.count)")
+        print()
         
         self.cache.save(todos: todos)
     }
@@ -273,7 +292,7 @@ final class App {
     private var todoManager: TodoManager
     
     func validateCommand(_ command: String) -> Bool {
-        print("You entered command: \(command)")
+//        print("You entered command: \(command)")
         
         for item in Command.allCases {
             if command == item.rawValue {
@@ -296,62 +315,65 @@ final class App {
         
         switch command {
         case Command.add.rawValue:
-            print("Enter the name of a Todo to add: ")
+            print("\t 📋 Adding a todo")
+            print("\t Enter the name of a Todo to add: ")
             
             guard var name = readLine() else { return }
             
             todoManager.addTodo(with: name)
         
         case Command.list.rawValue:
-            print("Listing todos")
+            print("\t📝 Listing todos")
             todoManager.listTodos()
             
         case Command.delete.rawValue:
-            print("Enter the index of a todo to delete: ")
+            print("\t🗑️ Deleting a todo")
+            print("\tEnter the index of a todo to delete: ")
             
             guard let todos = todoManager.getTodos() else {
-                print("error retrieving todos to show available indexes")
+                print("\t‼️ Error retrieving todos to show available indexes")
                 return
             }
             
-            print("Available indexes: ")
+            print("\t Available indexes: ")
             for (idx, todo) in todos.enumerated() {
-                print("\t \(idx) \(todo.title)")
+                print("\t\t \(idx) \(todo.title)")
             }
             
             guard let rawIndex = readLine(), let index = Int(rawIndex) else {
-                print("invalid index entered. try again.")
+                print("‼️ Invalid index entered. try again.")
                 return
             }
             
             todoManager.deleteTodo(atIndex: index)
             
         case Command.toggle.rawValue:
-            print("Enter the index of a todo to toggle completion of: ")
+            print("\t✅ Toggling completion")
+            print("\tEnter the index of a todo to toggle completion of: ")
             
             
             guard let todos = todoManager.getTodos() else {
-                print("error retrieving todos to show available indexes")
+                print("\tError retrieving todos to show available indexes")
                 return
             }
             
-            print("Available indexes: ")
+            print("\tAvailable indexes: ")
             for (idx, todo) in todos.enumerated() {
-                print("\t \(idx) \(todo.title)")
+                print("\t\t \(idx) \(todo.title)")
             }
             
             guard let rawIndex = readLine(), let index = Int(rawIndex) else {
-                print("invalid index entered. try again.")
+                print("\t‼️ Invalid index entered. try again.")
                 return
             }
             
             todoManager.toggleCompletion(forTodoAtIndex: index)
             
         case Command.exit.rawValue:
-            print("Exiting")
+            print("\t⬅️ Exiting")
             
         default:
-            print("The command you entered was not a valid one, try again.")
+            print("\t‼️ The command you entered was not a valid one, try again.")
             
         }
     }
@@ -363,7 +385,7 @@ Enter a command. Your command must be one of the following:
 🔖\tadd
 📝\tlist
 📌\ttoggle
-❌\tdelete
+🗑️\tdelete
 ⬅️\texit
 """
         var commandEntered: String = ""
