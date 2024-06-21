@@ -14,6 +14,12 @@ struct EventsView: View {
                 ForEach(events, id: \.self) {
                     event in
                     EventRow(event: event)
+                        .swipeActions {
+                            Button("Delete") {
+                                // delete event
+                            }
+                            .tint(.red)
+                        }
                 }
             }
             .navigationTitle("Events")
