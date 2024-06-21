@@ -23,8 +23,18 @@ struct EventsView: View {
                 }
             }
             .navigationTitle("Events")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        EventForm()
+                    } label: {
+                        Label("Add", systemImage: "plus")
+                    }
+                }
+            }
         }
     }
+    
 }
 
 #Preview {

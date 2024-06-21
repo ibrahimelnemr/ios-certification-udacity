@@ -3,4 +3,12 @@
 //  EventCountdown
 //
 
-import Foundation
+import SwiftUI
+
+struct EventForm: View {
+    
+    var body: some View {
+        Text("event form")
+    }
+    
+}
