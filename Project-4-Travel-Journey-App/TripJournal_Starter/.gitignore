@@ -1,0 +1,58 @@
+# macOS
+.DS_Store
+
+# Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+
+# Generated files
+build/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcuserstate
+*.xcscmblueprint
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Swift Package Manager
+.build/
+Package.resolved
+
+# Xcode Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# AppCode
+.idea/
+*.iml
+
+# User-specific files
+*.swp
+*.injection.plist
+*.out
+
+# Project-specific
+EventCountdown.xcodeproj/project.xcworkspace/xcuserdata/
+EventCountdown.xcodeproj/xcuserdata/
+
+SwiftBites.xcodeproj/project.xcworkspace/xcuserdata/
+SwiftBites.xcodeproj/xcuserdata/
+
+TripJournal.xcodeproj/project.xcworkspace/xcuserdata/
+TripJournal.xcodeproj/xcuserdata/
