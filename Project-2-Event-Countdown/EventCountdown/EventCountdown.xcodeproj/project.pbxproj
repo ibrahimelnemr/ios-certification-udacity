@@ -15,6 +15,7 @@
 		0F8BCB212C23DFD400A096A0 /* EventForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8BCB202C23DFD400A096A0 /* EventForm.swift */; };
 		0F8BCB232C23DFF100A096A0 /* EventRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8BCB222C23DFF100A096A0 /* EventRow.swift */; };
 		0F8BCB252C23E01600A096A0 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8BCB242C23E01600A096A0 /* Event.swift */; };
+		0FC4D5E82C264D7700EAA2F7 /* FormMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC4D5E72C264D7700EAA2F7 /* FormMode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		0F8BCB202C23DFD400A096A0 /* EventForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventForm.swift; sourceTree = "<group>"; };
 		0F8BCB222C23DFF100A096A0 /* EventRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRow.swift; sourceTree = "<group>"; };
 		0F8BCB242C23E01600A096A0 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		0FC4D5E72C264D7700EAA2F7 /* FormMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormMode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 			children = (
 				0F8BCB0E2C23DE4800A096A0 /* EventCountdownApp.swift */,
 				0F8BCB202C23DFD400A096A0 /* EventForm.swift */,
+				0FC4D5E72C264D7700EAA2F7 /* FormMode.swift */,
 				0F8BCB222C23DFF100A096A0 /* EventRow.swift */,
 				0F8BCB1C2C23DF5000A096A0 /* EventsView.swift */,
 				0F8BCB242C23E01600A096A0 /* Event.swift */,
@@ -152,6 +155,7 @@
 				0F8BCB112C23DE4800A096A0 /* ContentView.swift in Sources */,
 				0F8BCB212C23DFD400A096A0 /* EventForm.swift in Sources */,
 				0F8BCB232C23DFF100A096A0 /* EventRow.swift in Sources */,
+				0FC4D5E82C264D7700EAA2F7 /* FormMode.swift in Sources */,
 				0F8BCB0F2C23DE4800A096A0 /* EventCountdownApp.swift in Sources */,
 				0F8BCB252C23E01600A096A0 /* Event.swift in Sources */,
 				0F8BCB1D2C23DF5100A096A0 /* EventsView.swift in Sources */,

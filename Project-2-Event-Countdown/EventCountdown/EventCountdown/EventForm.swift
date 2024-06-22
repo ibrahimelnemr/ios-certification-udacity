@@ -6,19 +6,18 @@
 import SwiftUI
 
 struct EventForm: View {
+    var mode: FormMode
     @Binding var events: [Event]
     @State private var title = ""
     @State private var date = Date()
     @State private var textColor = Color.black
+    @Environment(\.presentationMode) var presentationMode
 //    var mode: Mode
 
     var body: some View {
         
+        
         let onSave = { (event: Event) -> Void in
-            
-            print("saved event\n)")
-            print("current number of events: \(events.count)\n)")
-
             events.append(event)
         }
         
@@ -38,7 +37,7 @@ struct EventForm: View {
                     ColorPicker("select text color", selection: $textColor)
                 }
             }
-            .navigationTitle("Add Event")
+            .navigationTitle(mode == .add ? "Add Event" : "Edit Event")
             .navigationBarItems(trailing: Button("Save") {
                 
                 let newEvent = Event(id: UUID(),
@@ -47,6 +46,7 @@ struct EventForm: View {
                                      textColor: textColor)
                 
                 onSave(newEvent)
+                presentationMode.wrappedValue.dismiss()
             })
         }
     }

@@ -32,7 +32,7 @@ struct EventsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        EventForm(events: $events)
+                        EventForm(mode: .add, events: $events)
                     } label: {
                         Label("Add", systemImage: "plus")
                     }

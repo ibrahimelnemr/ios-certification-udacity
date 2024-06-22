@@ -29,7 +29,7 @@ struct EventRow : View {
     }
     
     private func startTimer() {
-        Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             currentDate = Date()
         }
     }
