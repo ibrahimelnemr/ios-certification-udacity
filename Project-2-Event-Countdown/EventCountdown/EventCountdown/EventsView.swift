@@ -6,7 +6,11 @@
 import SwiftUI
 
 struct EventsView: View {
-    let events: [Event]
+    @State var events: [Event] = [
+        Event(id: UUID(), title: "Event 1", date: Date(), textColor: Color.green),
+        Event(id: UUID(), title: "Event 2", date: Date(), textColor: Color.red),
+        Event(id: UUID(), title: "Event 3", date: Date(), textColor: Color.blue)
+    ]
     
     var body: some View {
         NavigationStack {
@@ -16,7 +20,9 @@ struct EventsView: View {
                     EventRow(event: event)
                         .swipeActions {
                             Button("Delete") {
-                                // delete event
+                                if let index = events.firstIndex(where: {$0.id == event.id}) {
+                                    events.remove(at: index)
+                                }
                             }
                             .tint(.red)
                         }
@@ -26,7 +32,7 @@ struct EventsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        EventForm()
+                        EventForm(events: $events)
                     } label: {
                         Label("Add", systemImage: "plus")
                     }
