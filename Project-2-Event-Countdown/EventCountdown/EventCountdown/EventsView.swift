@@ -11,21 +11,25 @@ struct EventsView: View {
         Event(id: UUID(), title: "Event 2", date: Calendar.current.date(byAdding: .hour, value: 3, to: Date())!, textColor: Color.red),
         Event(id: UUID(), title: "Event 3", date: Calendar.current.date(byAdding: .day, value: 2, to: Date())!, textColor: Color.blue)
     ]
-
+    
     var body: some View {
         NavigationStack {
             List {
-                ForEach(events, id: \.self) {
-                    event in
-                    EventRow(event: event)
-                        .swipeActions {
-                            Button("Delete") {
-                                if let index = events.firstIndex(where: {$0.id == event.id}) {
-                                    events.remove(at: index)
-                                }
+                ForEach(events, id: \.self) { event in
+                    NavigationLink(value: event) {
+                        EventRow(event: event, events: $events)
+                    }
+                    .navigationDestination(for: Event.self) { event in
+                        EventRow(event: event, events: $events)
+                    }
+                    .swipeActions {
+                        Button("Delete") {
+                            if let index = events.firstIndex(where: { $0.id == event.id }) {
+                                events.remove(at: index)
                             }
-                            .tint(.red)
                         }
+                        .tint(.red)
+                    }
                 }
             }
             .navigationTitle("Events")

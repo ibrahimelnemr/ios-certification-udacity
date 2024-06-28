@@ -1,8 +1,3 @@
-//
-//  EventForm.swift
-//  EventCountdown
-//
-
 import SwiftUI
 
 struct EventForm: View {
@@ -11,51 +6,72 @@ struct EventForm: View {
     @State private var title = ""
     @State private var date = Date()
     @State private var textColor = Color.black
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     @Environment(\.presentationMode) var presentationMode
-//    var mode: Mode
 
     var body: some View {
-        
-        
         let onSave = { (event: Event) -> Void in
-            events.append(event)
+            if let index = events.firstIndex(where: { $0.id == event.id }) {
+                events[index] = event
+            } else {
+                events.append(event)
+            }
         }
-        
+
         NavigationView {
             Form {
-                Section(header: Text("event details")) {
-                    TextField("title", text: $title)
+                Section(header: Text("Event details")) {
+                    TextField("Title", text: $title)
                 }
-                
-                Section(header: Text("date")) {
+
+                Section(header: Text("Date")) {
                     DatePicker(selection: $date, in: Date()..., displayedComponents: .date) {
-                        Text("select date")
+                        Text("Select date")
                     }
                 }
-                
-                Section(header: Text("text color")) {
-                    ColorPicker("select text color", selection: $textColor)
+
+                Section(header: Text("Text color")) {
+                    ColorPicker("Select Text Color", selection: $textColor)
                 }
             }
-            .navigationTitle(mode == .add ? "Add Event" : "Edit Event")
+            .navigationTitle(mode == .add ? "Add event" : "Edit event")
             .navigationBarItems(trailing: Button("Save") {
-                
-                let newEvent = Event(id: UUID(),
-                                     title: title,
-                                     date: date,
-                                     textColor: textColor)
-                
-                onSave(newEvent)
-                presentationMode.wrappedValue.dismiss()
+                if title.isEmpty {
+                    alertMessage = "title cannot be empty"
+                    showAlert = true
+                } else {
+                    let newEvent = Event(
+                        id: {
+                            switch mode {
+                            case .add:
+                                return UUID()
+                            case .edit(let event):
+                                return event.id
+                            }
+                        }(),
+                        title: title,
+                        date: date,
+                        textColor: textColor
+                    )
+
+                    onSave(newEvent)
+                    presentationMode.wrappedValue.dismiss()
+                }
             })
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+            }
+            .onAppear {
+                switch mode {
+                case .edit(let event):
+                    title = event.title
+                    date = event.date
+                    textColor = event.textColor
+                case .add:
+                    break
+                }
+            }
         }
     }
-    
-
-    
-    
 }
-
-//#Preview {
-//    EventForm(events: events)
-//}

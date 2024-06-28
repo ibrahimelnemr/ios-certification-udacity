@@ -7,6 +7,7 @@ import SwiftUI
 
 struct EventRow : View {
     let event: Event
+    @Binding var events: [Event]
     @State private var currentDate = Date()
 
     
@@ -18,14 +19,22 @@ struct EventRow : View {
     
     var body: some View {
         HStack {
-            Text("\t\(event.title)")
-                .foregroundColor(event.textColor)
-            Spacer()
-            Text("\t\(relativeDate)")
-        }.padding()
-            .onAppear {
-                startTimer()
+            VStack(alignment: .leading) {
+                Text("\t\(event.title)")
+                    .foregroundColor(event.textColor)
+                Text("\t\(relativeDate)")
             }
+            Spacer()
+            NavigationLink(destination: EventForm(mode: .edit(event: event), events: $events)) {
+                Text("Edit event")
+                    .foregroundColor(.blue)
+            }
+            .buttonStyle(.bordered)
+        }
+        .padding()
+        .onAppear {
+            startTimer()
+        }
     }
     
     private func startTimer() {
@@ -35,6 +44,6 @@ struct EventRow : View {
     }
 }
 
-#Preview {
-    EventRow(event: Event(id: UUID(), title: "Test event", date: Date(), textColor: Color.black))
-}
+//#Preview {
+//    EventRow(event: Event(id: UUID(), title: "Test event", date: Date(), textColor: Color.black), events: [])
+//}
