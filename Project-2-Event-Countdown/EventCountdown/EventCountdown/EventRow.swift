@@ -24,12 +24,6 @@ struct EventRow : View {
                     .foregroundColor(event.textColor)
                 Text("\t\(relativeDate)")
             }
-            Spacer()
-            NavigationLink(destination: EventForm(mode: .edit(event: event), events: $events)) {
-                Text("Edit event")
-                    .foregroundColor(.blue)
-            }
-            .buttonStyle(.bordered)
         }
         .padding()
         .onAppear {

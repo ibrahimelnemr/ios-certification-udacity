@@ -20,7 +20,7 @@ struct EventsView: View {
                         EventRow(event: event, events: $events)
                     }
                     .navigationDestination(for: Event.self) { event in
-                        EventRow(event: event, events: $events)
+                        EventForm(mode: .edit(event: event), events: $events)
                     }
                     .swipeActions {
                         Button("Delete") {
