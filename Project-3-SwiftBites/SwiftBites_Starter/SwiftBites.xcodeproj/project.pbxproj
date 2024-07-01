@@ -23,6 +23,7 @@
 		07CF2F372B0A39FE003B83AD /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CF2F362B0A39FE003B83AD /* RecipeCell.swift */; };
 		07F6DE3F2B04321F004AD929 /* IngredientForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F6DE3E2B04321F004AD929 /* IngredientForm.swift */; };
 		0F6F0C222C2CF02800A64BB3 /* NewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6F0C212C2CF02800A64BB3 /* NewModels.swift */; };
+		0F6F0C242C3231AF00A64BB3 /* NewStorageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6F0C232C3231AF00A64BB3 /* NewStorageContainer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		07CF2F362B0A39FE003B83AD /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
 		07F6DE3E2B04321F004AD929 /* IngredientForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientForm.swift; sourceTree = "<group>"; };
 		0F6F0C212C2CF02800A64BB3 /* NewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewModels.swift; sourceTree = "<group>"; };
+		0F6F0C232C3231AF00A64BB3 /* NewStorageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStorageContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				07A2073F2AFAF5100048B7EA /* Models.swift */,
 				0F6F0C212C2CF02800A64BB3 /* NewModels.swift */,
 				07AD351B2B0EC75400A0FDF5 /* Storage.swift */,
+				0F6F0C232C3231AF00A64BB3 /* NewStorageContainer.swift */,
 				0719D4252B058E1800B1A4E3 /* Categories */,
 				07B772002AFC1D2E007BF4B0 /* Ingredients */,
 				07B771FF2AFC1D22007BF4B0 /* Recipes */,
@@ -203,6 +206,7 @@
 				07A207402AFAF5100048B7EA /* Models.swift in Sources */,
 				0719D4342B0590B500B1A4E3 /* RecipesView.swift in Sources */,
 				07CF2F332B0A1D4C003B83AD /* Utils.swift in Sources */,
+				0F6F0C242C3231AF00A64BB3 /* NewStorageContainer.swift in Sources */,
 				07F6DE3F2B04321F004AD929 /* IngredientForm.swift in Sources */,
 				0719D42D2B058E8D00B1A4E3 /* CategoriesView.swift in Sources */,
 				0719D4332B0590B500B1A4E3 /* RecipeForm.swift in Sources */,

@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct SwiftBitesApp: App {
@@ -6,6 +7,7 @@ struct SwiftBitesApp: App {
     WindowGroup {
       ContentView()
         .environment(\.storage, Storage())
+        .modelContainer(NewStorageContainer.create())
     }
   }
 }
