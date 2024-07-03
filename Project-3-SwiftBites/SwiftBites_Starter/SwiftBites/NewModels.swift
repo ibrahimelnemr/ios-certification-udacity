@@ -9,8 +9,9 @@ import SwiftData
 @Model
 final class Category: Identifiable, Hashable {
     
-    @Attribute(.unique)
     var id = UUID()
+    
+    @Attribute(.unique)
     var name: String
     
     @Relationship(inverse: \Recipe.category)
@@ -33,6 +34,8 @@ final class Category: Identifiable, Hashable {
 @Model
 final class Ingredient: Identifiable, Hashable {
     var id = UUID()
+    
+    @Attribute(.unique)
     var name: String
     
     init(id: UUID = UUID(), name: String) {
@@ -73,6 +76,8 @@ final class RecipeIngredient : Identifiable, Hashable {
 @Model
 final class Recipe: Identifiable, Hashable {
     var id = UUID()
+    
+    @Attribute(.unique)
     var name: String
     var summary: String
     var category: Category?

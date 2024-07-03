@@ -1,8 +1,14 @@
 import SwiftUI
+import SwiftData
 
 /// The main view that appears when the app is launched.
 struct ContentView: View {
-  @Environment(\.storage) private var storage
+    @Query(sort: [SortDescriptor(\Recipe.name, order: .forward)], animation: .bouncy) private var recipes: [Recipe]
+    @Query private var categories: [Category]
+    @Environment(\.modelContext) var context
+    @State private var selectedCategory: Category?
+
+//  @Environment(\.storage) private var storage
 
   var body: some View {
     TabView {
@@ -22,7 +28,7 @@ struct ContentView: View {
         }
     }
     .onAppear {
-      storage.load()
+//      storage.load()
     }
   }
 }
