@@ -54,8 +54,11 @@ final class Ingredient: Identifiable, Hashable {
 
 @Model
 final class RecipeIngredient : Identifiable, Hashable {
+    
     var id = UUID()
+    
     var ingredient: Ingredient
+    
     var quantity: Int
     
     init(id: UUID = UUID(), ingredient: Ingredient, quantity: Int) {
@@ -75,16 +78,25 @@ final class RecipeIngredient : Identifiable, Hashable {
 
 @Model
 final class Recipe: Identifiable, Hashable {
+    
     var id = UUID()
     
-    @Attribute(.unique)
+    @Attribute(.unique) 
     var name: String
+    
     var summary: String
+    
+    @Relationship(deleteRule: .cascade)
     var category: Category?
+    
     var serving: Int
+    
     var time: Int
+    
     var ingredients: [Ingredient]
+    
     var instructions: String
+    
     var imageData: Data?
     
     init(
