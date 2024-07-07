@@ -7,30 +7,30 @@ struct ContentView: View {
     @Query private var categories: [Category]
     @Environment(\.modelContext) var context
     @State private var selectedCategory: Category?
-
-//  @Environment(\.storage) private var storage
-
-  var body: some View {
-    TabView {
-      RecipesView()
-        .tabItem {
-          Label("Recipes", systemImage: "frying.pan")
+    
+    //  @Environment(\.storage) private var storage
+    
+    var body: some View {
+        TabView {
+            RecipesView()
+                .tabItem {
+                    Label("Recipes", systemImage: "frying.pan")
+                }
+            
+            CategoriesView()
+                .tabItem {
+                    Label("Categories", systemImage: "tag")
+                }
+            
+            IngredientsView()
+                .tabItem {
+                    Label("Ingredients", systemImage: "carrot")
+                }
         }
-
-      CategoriesView()
-        .tabItem {
-          Label("Categories", systemImage: "tag")
-        }
-
-      IngredientsView()
-        .tabItem {
-          Label("Ingredients", systemImage: "carrot")
+        .onAppear {
+            //      storage.load()
         }
     }
-    .onAppear {
-//      storage.load()
-    }
-  }
 }
 
 #Preview {

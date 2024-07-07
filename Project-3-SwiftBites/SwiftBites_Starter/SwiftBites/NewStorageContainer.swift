@@ -59,10 +59,10 @@ class NewStorageContainer {
         let cardamom = Ingredient(name: "Cardamom")
         let cinnamon = Ingredient(name: "Cinnamon")
         let turmeric = Ingredient(name: "Turmeric")
-
+        
         let italian = Category(name: "Italian")
         let middleEastern = Category(name: "Middle Eastern")
-
+        
         let margherita = Recipe(
             name: "Classic Margherita Pizza",
             summary: "A simple yet delicious pizza with tomato, mozzarella, basil, and olive oil.",
@@ -75,14 +75,14 @@ class NewStorageContainer {
         )
         
         margherita.ingredients = [
-             RecipeIngredient(ingredient: pizzaDough, quantity: "1 ball", recipe: margherita),
-             RecipeIngredient(ingredient: tomatoSauce, quantity: "1/2 cup", recipe: margherita),
-             RecipeIngredient(ingredient: mozzarellaCheese, quantity: "1 cup, shredded", recipe: margherita),
-             RecipeIngredient(ingredient: freshBasilLeaves, quantity: "A handful", recipe: margherita),
-             RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoon2", recipe: margherita),
-             RecipeIngredient(ingredient: salt, quantity: "Pinch", recipe: margherita)
-         ]
-
+            RecipeIngredient(ingredient: pizzaDough, quantity: "1 ball", recipe: margherita),
+            RecipeIngredient(ingredient: tomatoSauce, quantity: "1/2 cup", recipe: margherita),
+            RecipeIngredient(ingredient: mozzarellaCheese, quantity: "1 cup, shredded", recipe: margherita),
+            RecipeIngredient(ingredient: freshBasilLeaves, quantity: "A handful", recipe: margherita),
+            RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoon2", recipe: margherita),
+            RecipeIngredient(ingredient: salt, quantity: "Pinch", recipe: margherita)
+        ]
+        
         let spaghettiCarbonara = Recipe(
             name: "Spaghetti Carbonara",
             summary: "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
@@ -102,7 +102,7 @@ class NewStorageContainer {
             RecipeIngredient(ingredient: blackPepper, quantity: "To taste", recipe: spaghettiCarbonara),
             RecipeIngredient(ingredient: salt, quantity: "To taste", recipe: spaghettiCarbonara)
         ]
-
+        
         let hummus = Recipe(
             name: "Classic Hummus",
             summary: "A creamy and flavorful Middle Eastern dip made from chickpeas, tahini, and spices.",
@@ -128,7 +128,7 @@ class NewStorageContainer {
         ]
         
         
-
+        
         let falafel = Recipe(
             name: "Classic Falafel",
             summary: "A traditional Middle Eastern dish of spiced, fried chickpea balls, often served in pita bread.",
@@ -151,7 +151,7 @@ class NewStorageContainer {
             RecipeIngredient(ingredient: salt, quantity: "1 tsp", recipe: falafel),
             RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp", recipe: falafel)
         ]
-
+        
         let shawarma = Recipe(
             name: "Chicken Shawarma",
             summary: "A popular Middle Eastern dish featuring marinated chicken, slow-roasted to perfection.",
@@ -162,7 +162,7 @@ class NewStorageContainer {
             instructions: "Marinate chicken with yogurt, spices, garlic, lemon juice, and olive oil. Roast until cooked. Serve with pita and sauces.",
             imageData: UIImage(named: "chickenShawarma")?.pngData()
         )
-
+        
         shawarma.ingredients = [
             RecipeIngredient(ingredient: chickenThighs, quantity: "1 kg, boneless", recipe: shawarma),
             RecipeIngredient(ingredient: yogurt, quantity: "1 cup", recipe: shawarma),
@@ -177,34 +177,34 @@ class NewStorageContainer {
             RecipeIngredient(ingredient: blackPepper, quantity: "To taste", recipe: shawarma),
             RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons", recipe: shawarma)
         ]
-
-
+        
+        
         italian.recipes = [margherita, spaghettiCarbonara]
         middleEastern.recipes = [hummus, falafel, shawarma]
-
+        
         let ingredients = [
             pizzaDough, tomatoSauce, mozzarellaCheese, freshBasilLeaves, extraVirginOliveOil, salt,
             chickpeas, tahini, lemonJuice, garlic, cumin, water, paprika, parsley, spaghetti, eggs,
             parmesanCheese, pancetta, blackPepper, driedChickpeas, onions, cilantro, coriander, bakingPowder,
             chickenThighs, yogurt, cardamom, cinnamon, turmeric
         ]
-
+        
         let categories = [italian, middleEastern]
         let recipes = [margherita, spaghettiCarbonara, hummus, falafel, shawarma]
-
+        
         for ingredient in ingredients {
             context.insert(ingredient)
         }
-
+        
         for category in categories {
             context.insert(category)
         }
-
+        
         for recipe in recipes {
             context.insert(recipe)
         }
     }
-
+    
 }
 
 

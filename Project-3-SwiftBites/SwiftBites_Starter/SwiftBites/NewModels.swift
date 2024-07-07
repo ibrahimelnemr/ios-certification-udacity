@@ -84,7 +84,7 @@ final class Recipe: Identifiable, Hashable {
     
     var id = UUID()
     
-    @Attribute(.unique) 
+    @Attribute(.unique)
     var name: String
     
     var summary: String
@@ -122,7 +122,7 @@ final class Recipe: Identifiable, Hashable {
             self.ingredients = ingredients
             self.instructions = instructions
             self.imageData = imageData
-    }
+        }
     
     static func == (lhs: Recipe, rhs: Recipe) -> Bool {
         lhs.id == rhs.id
