@@ -297,7 +297,25 @@ struct RecipeForm: View {
 //                    instructions: instructions,
 //                    imageData: imageData
 //                )
-                print("RecipeForm - add recipe (needs implementation)")
+                
+                let recipe = Recipe (
+                    name: name,
+                    summary: summary,
+                    category: category,
+                    serving: serving,
+                    time: time,
+//                    ingredients: ingredients,
+                    instructions: instructions,
+                    imageData: imageData
+                )
+                
+                recipe.ingredients = ingredients
+                
+                try context.insert(recipe)
+                
+                print("RecipeForm - adding recipe with name: \(recipe.name)")
+                
+//                print("RecipeForm - add recipe (needs implementation)")
             case .edit(let recipe):
 //                try storage.updateRecipe(
 //                    id: recipe.id,
@@ -310,7 +328,21 @@ struct RecipeForm: View {
 //                    instructions: instructions,
 //                    imageData: imageData
 //                )
-                print("RecipeForm - edit recipe (needs implementation)")
+                
+                recipe.name = name
+                recipe.summary = summary
+                recipe.category = category
+                recipe.serving = serving
+                recipe.time = time
+                recipe.ingredients = ingredients
+                recipe.instructions = instructions
+                recipe.imageData = imageData
+                
+                try context.save()
+                
+                print("RecipeForm - editing recipe: \(recipe.name)")
+                
+//                print("RecipeForm - edit recipe (needs implementation)")
             }
             dismiss()
         } catch {
