@@ -65,13 +65,14 @@ struct IngredientsView: View {
         if ingredients.isEmpty {
             empty
         } else {
-            list(for: /*storage.ingredients.filter*/ ingredients.filter {
-                if query.isEmpty {
-                    return true
-                } else {
-                    return $0.name.localizedStandardContains(query)
-                }
-            })
+//            list(for: /*storage.ingredients.filter*/ ingredients.filter {
+//                if query.isEmpty {
+//                    return true
+//                } else {
+//                    return $0.name.localizedStandardContains(query)
+//                }
+//            })
+            list(for: filteredIngredients)
         }
     }
     
