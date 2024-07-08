@@ -181,8 +181,8 @@ class NewStorageContainer {
         ]
         
         
-//        italian.recipes = [margherita, spaghettiCarbonara]
-//        middleEastern.recipes = [hummus, falafel, shawarma]
+        italian.recipes = [margherita, spaghettiCarbonara]
+        middleEastern.recipes = [hummus, falafel, shawarma]
         
         let ingredients = [
             pizzaDough, tomatoSauce, mozzarellaCheese, freshBasilLeaves, extraVirginOliveOil, salt,
