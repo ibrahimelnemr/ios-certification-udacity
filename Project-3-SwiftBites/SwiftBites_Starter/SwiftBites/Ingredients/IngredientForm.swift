@@ -82,10 +82,14 @@ struct IngredientForm: View {
             switch mode {
             case .add:
 //                try storage.addIngredient(name: name)
+                try context.insert(Ingredient(name: name))
                 print("IngredientForm - add ingredient (needs implementation)")
             case .edit(let ingredient):
 //                try storage.updateIngredient(id: ingredient.id, name: name)
-                print("IngredientForm - edit ingredient (needs implementation")
+                ingredient.name = name
+                try context.save()
+//                print("IngredientForm - edit ingredient (needs implementation")
+                print("Ingredientform - editing ingredient: \(ingredient.name)")
             }
             dismiss()
         } catch {
