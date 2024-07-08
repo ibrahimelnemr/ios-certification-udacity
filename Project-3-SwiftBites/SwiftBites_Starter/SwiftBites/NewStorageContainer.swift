@@ -16,6 +16,8 @@ class NewStorageContainer {
         if isEmpty(context: container.mainContext) {
             loadSampleData(context: container.mainContext)
         }
+        // re-load sample data for testing
+//        loadSampleData(context: container.mainContext)
         return container
     }
     

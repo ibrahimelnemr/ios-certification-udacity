@@ -265,7 +265,12 @@ struct RecipeForm: View {
             fatalError("Delete unavailable in add mode")
         }
 //        storage.deleteRecipe(id: recipe.id)
-        print("RecipeForm - delete (needs implementation)")
+        
+        print("RecipeForm - deleting recipe: \(recipe.name)")
+        try context.delete(recipe)
+        
+//        print("RecipeForm - delete (needs implementation)")
+//        print("RecipeForm - deleted recipe \(recipe.name)")
         dismiss()
     }
     
@@ -305,7 +310,7 @@ struct RecipeForm: View {
 //                    instructions: instructions,
 //                    imageData: imageData
 //                )
-                print("RecipeForm - edit recipe (needs implementation")
+                print("RecipeForm - edit recipe (needs implementation)")
             }
             dismiss()
         } catch {

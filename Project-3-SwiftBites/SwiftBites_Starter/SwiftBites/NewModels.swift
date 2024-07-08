@@ -14,7 +14,7 @@ final class Category: Identifiable, Hashable {
     @Attribute(.unique)
     var name: String
     
-//    @Relationship(inverse: \Recipe.category)
+    @Relationship(inverse: \Recipe.category)
     var recipes: [Recipe]/*?*/
     
     init(id: UUID = UUID(), name: String) {
@@ -62,6 +62,7 @@ final class RecipeIngredient : Identifiable, Hashable {
     
     var quantity: String
     
+    @Relationship(deleteRule: .cascade)
     var recipe: Recipe
     
     init(id: UUID = UUID(), ingredient: Ingredient, quantity: String, recipe: Recipe) {
@@ -101,7 +102,6 @@ final class Recipe: Identifiable, Hashable {
     
     var imageData: Data?
     
-    @Relationship(deleteRule: .cascade)
     var ingredients: [RecipeIngredient]/*?*/
     
     init(
