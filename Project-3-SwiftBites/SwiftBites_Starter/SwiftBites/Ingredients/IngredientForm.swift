@@ -24,7 +24,7 @@ struct IngredientForm: View {
     private let title: String
     @State private var name: String
     @State private var error: Error?
-    @Environment(\.storage) private var storage
+//    @Environment(\.storage) private var storage
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isNameFocused: Bool
     
@@ -69,6 +69,7 @@ struct IngredientForm: View {
     
     private func delete(ingredient: Ingredient/*MockIngredient*/) {
 //        storage.deleteIngredient(id: ingredient.id)
+        
         print("Ingredientform - delete (needs implementation)")
         dismiss()
     }
@@ -77,9 +78,11 @@ struct IngredientForm: View {
         do {
             switch mode {
             case .add:
-                try storage.addIngredient(name: name)
+//                try storage.addIngredient(name: name)
+                print("IngredientForm - add ingredient (needs implementation)")
             case .edit(let ingredient):
-                try storage.updateIngredient(id: ingredient.id, name: name)
+//                try storage.updateIngredient(id: ingredient.id, name: name)
+                print("IngredientForm - edit ingredient (needs implementation")
             }
             dismiss()
         } catch {

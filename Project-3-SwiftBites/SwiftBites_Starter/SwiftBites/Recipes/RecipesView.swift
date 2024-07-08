@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct RecipesView: View {
-    @Environment(\.storage) private var storage
+//    @Environment(\.storage) private var storage
     @Environment(\.modelContext) var context
     @Query private var recipes: [Recipe]
     @State private var query = ""
