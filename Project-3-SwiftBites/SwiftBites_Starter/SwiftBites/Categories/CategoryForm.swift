@@ -69,12 +69,8 @@ struct CategoryForm: View {
     
     // MARK: - Data
     
-//    private func delete(category: MockCategory) {
+    private func deleteCategory(category: /*MockCategory*/Category) {
 //        storage.deleteCategory(id: category.id)
-//        dismiss()
-//    }
-
-    private func deleteCategory(category: Category) {
         context.delete(category)
         dismiss()
     }
@@ -89,7 +85,6 @@ struct CategoryForm: View {
             case .edit(let category):
                 category.name = name
                 try context.save()
-                
                 
             }
             dismiss()
