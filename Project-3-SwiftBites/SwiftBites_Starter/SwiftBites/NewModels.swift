@@ -62,14 +62,14 @@ final class RecipeIngredient : Identifiable, Hashable {
     
     var quantity: String
     
-    @Relationship(deleteRule: .cascade)
-    var recipe: Recipe
+//    @Relationship(deleteRule: .cascade)
+//    var recipe: Recipe
     
-    init(id: UUID = UUID(), ingredient: Ingredient, quantity: String, recipe: Recipe) {
+    init(id: UUID = UUID(), ingredient: Ingredient, quantity: String /*recipe: Recipe*/) {
         self.id = id
         self.ingredient = ingredient
         self.quantity = quantity
-        self.recipe = recipe
+//        self.recipe = recipe
     }
     
     static func == (lhs: RecipeIngredient, rhs: RecipeIngredient) -> Bool {
@@ -102,6 +102,7 @@ final class Recipe: Identifiable, Hashable {
     
     var imageData: Data?
     
+    @Relationship(deleteRule: .cascade)
     var ingredients: [RecipeIngredient]/*?*/
     
     init(

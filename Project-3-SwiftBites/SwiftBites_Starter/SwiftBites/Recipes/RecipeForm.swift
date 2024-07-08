@@ -95,7 +95,32 @@ struct RecipeForm: View {
         IngredientsView { selectedIngredient in
 //            let recipeIngredient = MockRecipeIngredient(ingredient: selectedIngredient, quantity: "")
 //            ingredients.append(recipeIngredient)
-            Text("ingredients picker (needs implementation)")
+            let selectedId = selectedIngredient.id
+            
+            let predicate = #Predicate<Ingredient> {
+                $0.id == selectedId
+            }
+            
+            let descriptor = FetchDescriptor<Ingredient>(
+                predicate: predicate
+            )
+            
+            let searchedIngredients = try? context.fetch(descriptor)
+            
+            for ingredient in searchedIngredients! {
+                print(ingredient.id)
+                print(ingredient.name)
+            }
+            
+            let foundIngredient = searchedIngredients![0]
+            
+            print(selectedIngredient.id)
+            
+//            let recipeIngredient = RecipeIngredient(ingredient: foundIngredient, quantity: "")
+            
+//            ingredients.append(recipeIngredient)
+//            ingredients.append(foundIngredient)
+//            Text("ingredients picker (needs implementation)")
         }
     }
     
