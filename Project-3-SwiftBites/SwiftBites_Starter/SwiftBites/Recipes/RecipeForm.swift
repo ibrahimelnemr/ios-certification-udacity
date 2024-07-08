@@ -1,11 +1,13 @@
 import SwiftUI
+import SwiftData
 import PhotosUI
 import Foundation
 
 struct RecipeForm: View {
     enum Mode: Hashable {
         case add
-        case edit(MockRecipe)
+//        case edit(MockRecipe)
+        case edit(Recipe)
     }
     
     var mode: Mode
@@ -41,14 +43,18 @@ struct RecipeForm: View {
     @State private var serving: Int
     @State private var time: Int
     @State private var instructions: String
-    @State private var categoryId: MockCategory.ID?
-    @State private var ingredients: [MockRecipeIngredient]
+//    @State private var categoryId: MockCategory.ID?
+    @State private var categoryId: Category.ID?
+//    @State private var ingredients: [MockRecipeIngredient]
+    @State private var ingredients: [RecipeIngredient]
     @State private var imageItem: PhotosPickerItem?
     @State private var imageData: Data?
     @State private var isIngredientsPickerPresented =  false
     @State private var error: Error?
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.storage) private var storage
+//    @Environment(\.storage) private var storage
+    @Environment(\.modelContext) var context
+    @Query private var categories: [Category]
     
     // MARK: - Body
     
@@ -157,9 +163,9 @@ struct RecipeForm: View {
     private var categorySection: some View {
         Section {
             Picker("Category", selection: $categoryId) {
-                Text("None").tag(nil as MockCategory.ID?)
-                ForEach(storage.categories) { category in
-                    Text(category.name).tag(category.id as MockCategory.ID?)
+                Text("None").tag(nil as /*MockCategory.ID?*/Category.ID?)
+                ForEach(/*storage.categories*/categories) { category in
+                    Text(category.name).tag(category.id as /*MockCategory.ID?*/Category.ID?)
                 }
             }
         }
@@ -254,11 +260,12 @@ struct RecipeForm: View {
     
     // MARK: - Data
     
-    func delete(recipe: MockRecipe) {
+    func delete(recipe: Recipe/*MockRecipe*/) {
         guard case .edit(let recipe) = mode else {
             fatalError("Delete unavailable in add mode")
         }
-        storage.deleteRecipe(id: recipe.id)
+//        storage.deleteRecipe(id: recipe.id)
+        print("RecipeForm - delete (needs implementation)")
         dismiss()
     }
     
@@ -269,33 +276,36 @@ struct RecipeForm: View {
     }
     
     func save() {
-        let category = storage.categories.first(where: { $0.id == categoryId })
+//        let category = storage.categories.first(where: { $0.id == categoryId })
+        let category = categories.first(where: { $0.id == categoryId })
         
         do {
             switch mode {
             case .add:
-                try storage.addRecipe(
-                    name: name,
-                    summary: summary,
-                    category: category,
-                    serving: serving,
-                    time: time,
-                    ingredients: ingredients,
-                    instructions: instructions,
-                    imageData: imageData
-                )
+//                try storage.addRecipe(
+//                    name: name,
+//                    summary: summary,
+//                    category: category,
+//                    serving: serving,
+//                    time: time,
+//                    ingredients: ingredients,
+//                    instructions: instructions,
+//                    imageData: imageData
+//                )
+                print("RecipeForm - add recipe (needs implementation)")
             case .edit(let recipe):
-                try storage.updateRecipe(
-                    id: recipe.id,
-                    name: name,
-                    summary: summary,
-                    category: category,
-                    serving: serving,
-                    time: time,
-                    ingredients: ingredients,
-                    instructions: instructions,
-                    imageData: imageData
-                )
+//                try storage.updateRecipe(
+//                    id: recipe.id,
+//                    name: name,
+//                    summary: summary,
+//                    category: category,
+//                    serving: serving,
+//                    time: time,
+//                    ingredients: ingredients,
+//                    instructions: instructions,
+//                    imageData: imageData
+//                )
+                print("RecipeForm - edit recipe (needs implementation")
             }
             dismiss()
         } catch {

@@ -34,9 +34,9 @@ struct CategorySection: View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: 0) {
                 ForEach(category.recipes, id: \.name) { recipe in
-//                    RecipeCell(recipe: recipe)
-//                        .containerRelativeFrame(.horizontal, count: 12, span: 11, spacing: 0)
-                    Text("Recipe: \(recipe.name)\n")
+                    RecipeCell(recipe: recipe)
+                        .containerRelativeFrame(.horizontal, count: 12, span: 11, spacing: 0)
+//                    Text("Recipe: \(recipe.name)\n")
                 }
             }
             .scrollTargetLayout()
