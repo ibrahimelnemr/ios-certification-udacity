@@ -3,11 +3,17 @@ import SwiftData
 
 @main
 struct SwiftBitesApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.storage, Storage())
+//                .environment(\.storage, Storage())
                 .modelContainer(NewStorageContainer.create())
         }
     }
+}
+
+#Preview {
+    ContentView()
+        .modelContainer(NewStorageContainer.create())
 }

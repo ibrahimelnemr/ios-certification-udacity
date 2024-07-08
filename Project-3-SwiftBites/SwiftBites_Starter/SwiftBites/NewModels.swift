@@ -14,12 +14,13 @@ final class Category: Identifiable, Hashable {
     @Attribute(.unique)
     var name: String
     
-    @Relationship(inverse: \Recipe.category)
-    var recipes: [Recipe] = []
+//    @Relationship(inverse: \Recipe.category)
+    var recipes: [Recipe]/*?*/
     
     init(id: UUID = UUID(), name: String) {
         self.id = id
         self.name = name
+        self.recipes = []
     }
     
     static func == (lhs: Category, rhs: Category) -> Bool {
@@ -101,7 +102,7 @@ final class Recipe: Identifiable, Hashable {
     var imageData: Data?
     
     @Relationship(deleteRule: .cascade)
-    var ingredients: [RecipeIngredient]? = []
+    var ingredients: [RecipeIngredient]/*?*/
     
     init(
         id: UUID = UUID(),
@@ -110,7 +111,7 @@ final class Recipe: Identifiable, Hashable {
         category: Category?,
         serving: Int,
         time: Int,
-        ingredients: [RecipeIngredient]?,
+//        ingredients: [RecipeIngredient]?,
         instructions: String,
         imageData: Data?) {
             self.id = id
@@ -119,7 +120,8 @@ final class Recipe: Identifiable, Hashable {
             self.category = category
             self.serving = serving
             self.time = time
-            self.ingredients = ingredients
+//            self.ingredients = ingredients
+            self.ingredients = []
             self.instructions = instructions
             self.imageData = imageData
         }

@@ -69,7 +69,7 @@ class NewStorageContainer {
             category: italian,
             serving: 4,
             time: 50,
-            ingredients: [],
+//            ingredients: [],
             instructions: "Preheat oven, roll out dough, apply sauce, add cheese and basil, bake for 20 minutes.",
             imageData: UIImage(named: "margherita")?.pngData()
         )
@@ -89,7 +89,7 @@ class NewStorageContainer {
             category: italian,
             serving: 4,
             time: 30,
-            ingredients: [],
+//            ingredients: [],
             instructions: "Cook spaghetti. Fry pancetta until crisp. Whisk eggs and Parmesan, add to pasta with pancetta, and season with black pepper.",
             imageData: UIImage(named: "spaghettiCarbonara")?.pngData()
         )
@@ -109,7 +109,7 @@ class NewStorageContainer {
             category: middleEastern,
             serving: 6,
             time: 10,
-            ingredients: [],
+//            ingredients: [],
             instructions: "Blend chickpeas, tahini, lemon juice, garlic, and spices. Adjust consistency with water. Garnish with olive oil, paprika, and parsley.",
             imageData: UIImage(named: "hummus")?.pngData()
         )
@@ -135,7 +135,7 @@ class NewStorageContainer {
             category: middleEastern,
             serving: 4,
             time: 60,
-            ingredients: [],
+//            ingredients: [],
             instructions: "Soak chickpeas overnight. Blend with onions, garlic, herbs, and spices. Form into balls, add baking powder, and fry until golden.",
             imageData: UIImage(named: "falafel")?.pngData()
         )
@@ -158,7 +158,7 @@ class NewStorageContainer {
             category: middleEastern,
             serving: 4,
             time: 120,
-            ingredients: [],
+//            ingredients: [],
             instructions: "Marinate chicken with yogurt, spices, garlic, lemon juice, and olive oil. Roast until cooked. Serve with pita and sauces.",
             imageData: UIImage(named: "chickenShawarma")?.pngData()
         )
@@ -179,8 +179,8 @@ class NewStorageContainer {
         ]
         
         
-        italian.recipes = [margherita, spaghettiCarbonara]
-        middleEastern.recipes = [hummus, falafel, shawarma]
+//        italian.recipes = [margherita, spaghettiCarbonara]
+//        middleEastern.recipes = [hummus, falafel, shawarma]
         
         let ingredients = [
             pizzaDough, tomatoSauce, mozzarellaCheese, freshBasilLeaves, extraVirginOliveOil, salt,
@@ -203,6 +203,8 @@ class NewStorageContainer {
         for recipe in recipes {
             context.insert(recipe)
         }
+        
+        print("Entered all sample data into storage container")
     }
     
 }
