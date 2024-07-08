@@ -126,6 +126,8 @@ struct IngredientsView: View {
     
     private func delete(ingredient: Ingredient/*MockIngredient*/) {
 //        storage.deleteIngredient(id: ingredient.id)
-        print("IngredientsView - delete ingredient (needs implementation)")
+        context.delete(ingredient)
+        print("Ingredient deleted: \(ingredient.name)")
+//        print("IngredientsView - delete ingredient (needs implementation)")
     }
 }

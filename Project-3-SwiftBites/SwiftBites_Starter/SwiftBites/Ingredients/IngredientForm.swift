@@ -25,6 +25,7 @@ struct IngredientForm: View {
     @State private var name: String
     @State private var error: Error?
 //    @Environment(\.storage) private var storage
+    @Environment(\.modelContext) var context
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isNameFocused: Bool
     
@@ -70,7 +71,9 @@ struct IngredientForm: View {
     private func delete(ingredient: Ingredient/*MockIngredient*/) {
 //        storage.deleteIngredient(id: ingredient.id)
         
-        print("Ingredientform - delete (needs implementation)")
+//        print("Ingredientform - delete (needs implementation)")
+        context.delete(ingredient)
+        print("Ingredient deleted: \(ingredient.name)")
         dismiss()
     }
     
