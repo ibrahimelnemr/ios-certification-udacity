@@ -1,7 +1,8 @@
 import SwiftUI
+import SwiftData
 
 struct IngredientsView: View {
-    typealias Selection = (MockIngredient) -> Void
+    typealias Selection = (/*MockIngredient*/Ingredient) -> Void
     
     let selection: Selection?
     
@@ -9,7 +10,9 @@ struct IngredientsView: View {
         self.selection = selection
     }
     
-    @Environment(\.storage) private var storage
+    @Environment (\.modelContext) var context
+    @Query private var ingredients: [Ingredient]
+//    @Environment(\.storage) private var storage
     @Environment(\.dismiss) private var dismiss
     @State private var query = ""
     
@@ -20,7 +23,8 @@ struct IngredientsView: View {
             content
                 .navigationTitle("Ingredients")
                 .toolbar {
-                    if !storage.ingredients.isEmpty {
+//                    if !storage.ingredients.isEmpty {
+                    if ingredients.isEmpty {
                         NavigationLink(value: IngredientForm.Mode.add) {
                             Label("Add", systemImage: "plus")
                         }
@@ -36,10 +40,11 @@ struct IngredientsView: View {
     
     @ViewBuilder
     private var content: some View {
-        if storage.ingredients.isEmpty {
+//        if storage.ingredients.isEmpty {
+        if ingredients.isEmpty {
             empty
         } else {
-            list(for: storage.ingredients.filter {
+            list(for: /*storage.ingredients.filter*/ ingredients.filter {
                 if query.isEmpty {
                     return true
                 } else {
@@ -74,7 +79,7 @@ struct IngredientsView: View {
         .listRowSeparator(.hidden)
     }
     
-    private func list(for ingredients: [MockIngredient]) -> some View {
+    private func list(for ingredients: [/*MockIngredient*/Ingredient]) -> some View {
         List {
             if ingredients.isEmpty {
                 noResults
@@ -94,7 +99,7 @@ struct IngredientsView: View {
     }
     
     @ViewBuilder
-    private func row(for ingredient: MockIngredient) -> some View {
+    private func row(for ingredient: Ingredient/*MockIngredient*/) -> some View {
         if let selection {
             Button(
                 action: {
@@ -112,14 +117,14 @@ struct IngredientsView: View {
         }
     }
     
-    private func title(for ingredient: MockIngredient) -> some View {
+    private func title(for ingredient: /*MockIngredient*/Ingredient) -> some View {
         Text(ingredient.name)
             .font(.title3)
     }
     
     // MARK: - Data
     
-    private func delete(ingredient: MockIngredient) {
+    private func delete(ingredient: Ingredient/*MockIngredient*/) {
 //        storage.deleteIngredient(id: ingredient.id)
         print("IngredientsView - delete ingredient (needs implementation)")
     }
