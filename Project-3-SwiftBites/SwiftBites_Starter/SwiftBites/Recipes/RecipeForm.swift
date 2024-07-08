@@ -87,8 +87,9 @@ struct RecipeForm: View {
     
     private func ingredientPicker() -> some View {
         IngredientsView { selectedIngredient in
-            let recipeIngredient = MockRecipeIngredient(ingredient: selectedIngredient, quantity: "")
-            ingredients.append(recipeIngredient)
+//            let recipeIngredient = MockRecipeIngredient(ingredient: selectedIngredient, quantity: "")
+//            ingredients.append(recipeIngredient)
+            Text("ingredients picker (needs implementation)")
         }
     }
     

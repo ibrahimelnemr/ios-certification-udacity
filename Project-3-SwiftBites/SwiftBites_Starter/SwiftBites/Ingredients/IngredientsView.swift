@@ -120,6 +120,7 @@ struct IngredientsView: View {
     // MARK: - Data
     
     private func delete(ingredient: MockIngredient) {
-        storage.deleteIngredient(id: ingredient.id)
+//        storage.deleteIngredient(id: ingredient.id)
+        print("IngredientsView - delete ingredient (needs implementation)")
     }
 }
