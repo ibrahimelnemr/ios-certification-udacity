@@ -13,6 +13,7 @@ struct RootView: View {
     var body: some View {
         content
             .environment(\.journalService, service)
+        
             .onReceive(service.isAuthenticated.receive(on: DispatchQueue.main)) { isAuthenticated in
                 self.isAuthenticated = isAuthenticated
             }
