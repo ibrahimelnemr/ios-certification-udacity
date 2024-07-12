@@ -1,8 +1,59 @@
 import Combine
 import Foundation
 
+enum HTTPMethods: String {
+    case POST, GET, PUT, DELETE
+}
+
+enum MIMEType: String {
+    case JSON = "application/json"
+    case form = "application/x-www-form-urlencoded"
+}
+
+enum HTTPHeaders: String {
+    case accept
+    case contentType = "Content-Type"
+    case authorization = "Authorization"
+}
+
+enum NetworkError: Error {
+    case badUrl
+    case badResponse
+    case failedToDecodeResponse
+    case invalidValue
+}
+
+enum SessionError: Error {
+    case expired
+}
+
+extension SessionError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .expired:
+            return "Your session has expired. Please log in again."
+        }
+    }
+}
+
+
 /// An unimplemented version of the `JournalService`.
 class UnimplementedJournalService: JournalService {
+    
+    var tokenExpired: Bool = false
+
+        @Published private var token: Token? {
+            didSet {
+                if let token = token {
+                    try? KeychainHelper.shared.saveToken(token)
+                } else {
+                    try? KeychainHelper.shared.deleteToken()
+                }
+            }
+        }
+    
+    
+    
     var isAuthenticated: AnyPublisher<Bool, Never> {
         fatalError("Unimplemented isAuthenticated")
     }
