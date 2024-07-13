@@ -169,24 +169,54 @@ class UnimplementedJournalService: JournalService {
         }
         return expirationDate <= Date()
     }
+    
+    private func createURLRequest(url: URL, httpMethod: HTTPMethods)  throws -> URLRequest {
+        
+        guard let token = token else {
+            print("createURLRequest(): error - cannot find token")
+            throw NetworkError.invalidValue
+        }
+        
+//        guard let url1 = URL(string: url) else {
+//            print("createURLRequest: unable to create URL from string provided")
+//            throw URLError(.badURL)
+//        }
+                
+//        var requestURL = URLRequest(url: url1)
+        
+        var requestURL = URLRequest(url: url)
+        
+        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
+        
+        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+     
+        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+        requestURL.httpMethod = httpMethod.rawValue
+        
+        return requestURL
+    }
 
     func createTrip(with request: TripCreate) async throws -> Trip {
         guard let token = token else {
             throw NetworkError.invalidValue
         }
+        
+        var requestURL = try createURLRequest(url: EndPoints.trips.url, httpMethod: HTTPMethods.POST)
 
-        var requestURL = URLRequest(url: EndPoints.trips.url)
+//        var requestURL = URLRequest(url: EndPoints.trips.url)
         
-        requestURL.httpMethod = HTTPMethods.POST.rawValue
+//        requestURL.httpMethod = HTTPMethods.POST.rawValue
         
-        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
+//        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
         
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+//        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
         
         print("Access token: ")
         print(token.accessToken)
         
-        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
 
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime]
@@ -297,6 +327,7 @@ class UnimplementedJournalService: JournalService {
 
         try await performVoidNetworkRequest(requestURL)
     }
+    
     
     private func createRegisterRequest(username: String, password: String) throws -> URLRequest {
         var request = URLRequest(url: EndPoints.register.url)
