@@ -233,8 +233,8 @@ class UnimplementedJournalService: JournalService {
 
             
             let trips = try await performNetworkRequest(requestURL, responseType: [Trip].self)
-            print("Trips: ")
-            print(trips)
+//            print("Trips: ")
+//            print(trips)
             
             print("saving trips to cache")
             tripCacheManager.saveTrips(trips)
@@ -286,6 +286,7 @@ class UnimplementedJournalService: JournalService {
     }
 
     func deleteTrip(withId tripId: Trip.ID) async throws {
+        print("journalservice - deleteTrip()")
         guard let token = token else {
             throw NetworkError.invalidValue
         }
@@ -328,6 +329,10 @@ class UnimplementedJournalService: JournalService {
               httpResponse.statusCode == 200 else {
             throw NetworkError.badResponse
         }
+        
+        print(data)
+        print(response)
+        print(httpResponse)
 
         do {
             let decoder = JSONDecoder()
@@ -393,7 +398,7 @@ class UnimplementedJournalService: JournalService {
         
     }
 
-    func updateEvent(withId eventId: Event.ID, and _: EventUpdate) async throws -> Event {
+    func updateEvent(withId eventId: Event.ID, and event: EventUpdate) async throws -> Event {
         
         guard let token = token else {
             throw NetworkError.invalidValue
@@ -407,6 +412,43 @@ class UnimplementedJournalService: JournalService {
         
         requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
         
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime]
+        
+        let defaultLocation = Location(latitude: 0.0, longitude: 0.0, address: "")
+        
+        let location = event.location ?? defaultLocation
+        
+        let locationData: [String: Any] = [
+            "latitude": location.latitude,
+            "longitude": location.longitude,
+            "address": location.address ?? ""
+        ]
+
+        let eventData: [String: Any] = [
+//            "trip_id": event.tripId,
+            "name": event.name,
+            "date": dateFormatter.string(from: event.date),
+            "location": locationData,
+            "transition_from_previous": event.transitionFromPrevious ?? ""
+        ]
+        print(eventData)
+        
+        print("updateEvent - Checking if eventdata can be serialized as json")
+        guard JSONSerialization.isValidJSONObject(eventData) else {
+            print("createMedia - cannot serialize object: ")
+            print(eventData)
+            throw NetworkError.invalidValue
+        }
+        print("event can be serialized as json")
+        
+        let jsonData = try JSONSerialization.data(withJSONObject: eventData, options: .prettyPrinted)
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            print("Serialized JSON object: \(jsonString)")
+        }
+        
+        requestURL.httpBody = jsonData
+        
         let updatedEvent = try await performNetworkRequest(requestURL, responseType: Event.self)
         
         return updatedEvent
@@ -414,12 +456,12 @@ class UnimplementedJournalService: JournalService {
     }
 
     func deleteEvent(withId eventId: Event.ID) async throws {
-        
+        print("journalservice - deleteEvent()")
         guard let token = token else {
             throw NetworkError.invalidValue
         }
         
-        let url = EndPoints.handleTrip(eventId.description).url
+        let url = EndPoints.handleEvent(eventId.description).url
         
         var requestURL = URLRequest(url: url)
         
