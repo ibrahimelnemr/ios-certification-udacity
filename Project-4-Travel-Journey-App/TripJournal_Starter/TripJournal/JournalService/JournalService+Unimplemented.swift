@@ -286,10 +286,12 @@ class UnimplementedJournalService: JournalService {
             throw NetworkError.invalidValue
         }
         
-        let url = EndPoints.handleTrip(tripId.description).url
-        var requestURL = URLRequest(url: url)
-        requestURL.httpMethod = HTTPMethods.GET.rawValue
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        var requestURL = try createURLRequest(url: EndPoints.handleTrip(tripId.description).url, httpMethod: HTTPMethods.GET)
+        
+//        let url = EndPoints.handleTrip(tripId.description).url
+//        var requestURL = URLRequest(url: url)
+//        requestURL.httpMethod = HTTPMethods.GET.rawValue
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
         
         let trip = try await performNetworkRequest(requestURL, responseType: Trip.self)
         
