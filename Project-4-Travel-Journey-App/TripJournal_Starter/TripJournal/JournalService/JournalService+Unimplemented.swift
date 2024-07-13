@@ -243,19 +243,20 @@ class UnimplementedJournalService: JournalService {
             print("Offline: Loading trips from UserDefaults")
             return tripCacheManager.loadTrips()
         }
+        
+        var requestURL = try createURLRequest(url: EndPoints.trips.url, httpMethod: HTTPMethods.GET)
 
-        var requestURL = URLRequest(url: EndPoints.trips.url)
+
+//        var requestURL = URLRequest(url: EndPoints.trips.url)
         
-        requestURL.httpMethod = HTTPMethods.GET.rawValue
+//        requestURL.httpMethod = HTTPMethods.GET.rawValue
         
-        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
+//        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
         
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
         
         print("Access token: ")
         print(token.accessToken)
-        
-
 
         do {
             
