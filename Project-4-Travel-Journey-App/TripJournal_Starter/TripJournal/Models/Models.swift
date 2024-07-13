@@ -53,6 +53,17 @@ struct Event: Identifiable, Sendable, Hashable, Codable {
     var location: Location?
     var medias: [Media]
     var transitionFromPrevious: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name = "name"
+        case note = "note"
+        case date = "date"
+        case location = "location"
+        case medias = "medias"
+        case transitionFromPrevious = "transition_from_previous"
+    }
+
 }
 
 /// Represents a location.
@@ -63,6 +74,12 @@ struct Location: Sendable, Hashable, Codable {
 
     var coordinate: CLLocationCoordinate2D {
         return .init(latitude: latitude, longitude: longitude)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case latitude = "latitude"
+        case longitude = "longitude"
+        case address = "address"
     }
 }
 

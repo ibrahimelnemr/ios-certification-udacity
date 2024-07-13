@@ -26,6 +26,7 @@ async def create_event(
         raise HTTPException(status_code=404, detail="Trip not found")
     else:
         event_dict = event.model_dump()
+        print(event_dict)
         location_data = event_dict.pop("location", None)
         location = (
             location_models.Location(**location_data, owner_id=user.id)

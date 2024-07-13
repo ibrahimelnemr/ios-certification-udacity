@@ -368,13 +368,25 @@ class UnimplementedJournalService: JournalService {
 
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime]
+        
+        let defaultLocation = Location(latitude: 0.0, longitude: 0.0, address: "")
+        
+        let location = request.location ?? defaultLocation
+        
+        let locationData: [String: Any] = [
+            "latitude": location.latitude,
+            "longitude": location.longitude,
+            "address": location.address ?? ""
+        ]
 
         let eventData: [String: Any] = [
+            "trip_id": request.tripId,
             "name": request.name,
             "date": dateFormatter.string(from: request.date),
-            "location": request.location,
-            "transition_from_previous": request.transitionFromPrevious
+            "location": locationData,
+            "transition_from_previous": request.transitionFromPrevious ?? ""
         ]
+        print(eventData)
         requestURL.httpBody = try JSONSerialization.data(withJSONObject: eventData)
 
         return try await performNetworkRequest(requestURL, responseType: Event.self)
