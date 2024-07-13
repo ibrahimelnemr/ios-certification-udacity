@@ -305,15 +305,15 @@ class UnimplementedJournalService: JournalService {
             throw NetworkError.invalidValue
         }
         
-//        var requestURL = try createURLRequest(url: EndPoints.handleTrip(tripId.description).url, httpMethod: HTTPMethods.GET)
+        var requestURL = try createURLRequest(url: EndPoints.handleTrip(tripId.description).url, httpMethod: HTTPMethods.PUT)
         
-        let url = EndPoints.handleTrip(tripId.description).url
+//        let url = EndPoints.handleTrip(tripId.description).url
         
-        var requestURL = URLRequest(url: url)
+//        var requestURL = URLRequest(url: url)
         
-        requestURL.httpMethod = HTTPMethods.PUT.rawValue
+//        requestURL.httpMethod = HTTPMethods.PUT.rawValue
         
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
         
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime]
