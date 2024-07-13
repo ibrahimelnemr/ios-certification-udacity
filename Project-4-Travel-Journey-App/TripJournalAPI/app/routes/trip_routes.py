@@ -28,12 +28,17 @@ async def create_trip(
 async def get_trips(
     request: Request, db=Depends(get_db), user=Depends(get_current_user)
 ):
+    print(db.query(models.Trip)
+        .filter(models.Trip.owner_id == user.id)
+        .order_by(models.Trip.start_date)
+        .all())
     return (
         db.query(models.Trip)
         .filter(models.Trip.owner_id == user.id)
         .order_by(models.Trip.start_date)
         .all()
     )
+
 
 
 @router.get("/{trip_id}", response_model=schemas.Trip)

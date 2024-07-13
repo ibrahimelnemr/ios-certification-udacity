@@ -176,9 +176,16 @@ class UnimplementedJournalService: JournalService {
         }
 
         var requestURL = URLRequest(url: EndPoints.trips.url)
+        
         requestURL.httpMethod = HTTPMethods.POST.rawValue
+        
         requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
+        
         requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+        print("Access token: ")
+        print(token.accessToken)
+        
         requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
 
         let dateFormatter = ISO8601DateFormatter()
@@ -189,12 +196,14 @@ class UnimplementedJournalService: JournalService {
             "start_date": dateFormatter.string(from: request.startDate),
             "end_date": dateFormatter.string(from: request.endDate)
         ]
+        
         requestURL.httpBody = try JSONSerialization.data(withJSONObject: tripData)
 
         return try await performNetworkRequest(requestURL, responseType: Trip.self)
     }
 
     func getTrips() async throws -> [Trip] {
+        
         guard let token = token else {
             throw NetworkError.invalidValue
         }
@@ -206,9 +215,15 @@ class UnimplementedJournalService: JournalService {
         }
 
         var requestURL = URLRequest(url: EndPoints.trips.url)
+        
         requestURL.httpMethod = HTTPMethods.GET.rawValue
+        
         requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
+        
         requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+        print("Access token: ")
+        print(token.accessToken)
 
         do {
             let trips = try await performNetworkRequest(requestURL, responseType: [Trip].self)
@@ -322,7 +337,7 @@ class UnimplementedJournalService: JournalService {
     
 
     func createEvent(with request: EventCreate) async throws -> Event {
-        fatalError("Unimplemented createEvent")
+//        fatalError("Unimplemented createEvent")
         
         guard let token = token else {
             throw NetworkError.invalidValue
@@ -406,11 +421,8 @@ class UnimplementedJournalService: JournalService {
         
         requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
 
-        let dateFormatter = ISO8601DateFormatter()
-        dateFormatter.formatOptions = [.withInternetDateTime]
-
         let mediaData: [String: Any] = [
-            "caption": request.caption,
+//            "caption": request.caption,
             "base64_data": request.base64Data,
             "event_id": request.eventId
         ]
