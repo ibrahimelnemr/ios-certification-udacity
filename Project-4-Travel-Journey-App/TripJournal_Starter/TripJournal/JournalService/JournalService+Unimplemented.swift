@@ -582,19 +582,21 @@ class UnimplementedJournalService: JournalService {
         print("journalservice - deleteMedia()")
         
         
-        guard let token = token else {
-            throw NetworkError.invalidValue
-        }
+//        guard let token = token else {
+//            throw NetworkError.invalidValue
+//        }
         
-        let url = EndPoints.handleMedia(mediaId.description).url
+        var requestURL = try createURLRequest(url: EndPoints.handleMedia(mediaId.description).url, httpMethod: HTTPMethods.DELETE)
         
-        var requestURL = URLRequest(url: url)
+//        let url = EndPoints.handleMedia(mediaId.description).url
         
-        print(requestURL)
+//        var requestURL = URLRequest(url: url)
         
-        requestURL.httpMethod = HTTPMethods.DELETE.rawValue
+//        print(requestURL)
         
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+//        requestURL.httpMethod = HTTPMethods.DELETE.rawValue
+        
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
 
         try await performVoidNetworkRequest(requestURL)
     }
