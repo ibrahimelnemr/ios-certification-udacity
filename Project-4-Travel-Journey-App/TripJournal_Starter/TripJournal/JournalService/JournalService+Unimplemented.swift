@@ -417,16 +417,18 @@ class UnimplementedJournalService: JournalService {
         guard let token = token else {
             throw NetworkError.invalidValue
         }
+        
+        var requestURL = try createURLRequest(url: EndPoints.events.url, httpMethod: HTTPMethods.POST)
 
-        var requestURL = URLRequest(url: EndPoints.events.url)
+//        var requestURL = URLRequest(url: EndPoints.events.url)
         
-        requestURL.httpMethod = HTTPMethods.POST.rawValue
+//        requestURL.httpMethod = HTTPMethods.POST.rawValue
         
-        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
+//        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
         
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
         
-        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+//        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
 
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime]
