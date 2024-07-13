@@ -333,16 +333,25 @@ class UnimplementedJournalService: JournalService {
     }
 
     func deleteTrip(withId tripId: Trip.ID) async throws {
+        
         print("journalservice - deleteTrip()")
+        
         guard let token = token else {
             throw NetworkError.invalidValue
         }
-        let url = EndPoints.handleTrip(tripId.description).url
-        var requestURL = URLRequest(url: url)
-        requestURL.httpMethod = HTTPMethods.DELETE.rawValue
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
-
+        
+        var requestURL = try createURLRequest(url: EndPoints.handleTrip(tripId.description).url, httpMethod: HTTPMethods.DELETE)
+        
+//        let url = EndPoints.handleTrip(tripId.description).url
+        
+//        var requestURL = URLRequest(url: url)
+        
+//        requestURL.httpMethod = HTTPMethods.DELETE.rawValue
+        
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
         try await performVoidNetworkRequest(requestURL)
+        
     }
     
     
