@@ -227,7 +227,7 @@ class UnimplementedJournalService: JournalService {
         
         let (data, _) = try await URLSession.shared.data(for: requestURL)
 
-        let responseObject = try JSONDecoder.decode([Trip].self, from: data)
+//        let responseObject = try JSONDecoder.decode([Trip].self, from: data)
 
 
         do {
