@@ -459,9 +459,9 @@ class UnimplementedJournalService: JournalService {
 
     func updateEvent(withId eventId: Event.ID, and event: EventUpdate) async throws -> Event {
         
-        guard let token = token else {
-            throw NetworkError.invalidValue
-        }
+//        guard let token = token else {
+//            throw NetworkError.invalidValue
+//        }
         
         var requestURL = try createURLRequest(url: EndPoints.handleEvent(eventId.description).url, httpMethod: HTTPMethods.PUT)
         
@@ -518,17 +518,21 @@ class UnimplementedJournalService: JournalService {
 
     func deleteEvent(withId eventId: Event.ID) async throws {
         print("journalservice - deleteEvent()")
-        guard let token = token else {
-            throw NetworkError.invalidValue
-        }
         
-        let url = EndPoints.handleEvent(eventId.description).url
+//        guard let token = token else {
+//            throw NetworkError.invalidValue
+//        }
         
-        var requestURL = URLRequest(url: url)
+        var requestURL = try createURLRequest(url: EndPoints.handleEvent(eventId.description).url, httpMethod: HTTPMethods.DELETE)
+
         
-        requestURL.httpMethod = HTTPMethods.DELETE.rawValue
+//        let url = EndPoints.handleEvent(eventId.description).url
         
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+//        var requestURL = URLRequest(url: url)
+        
+//        requestURL.httpMethod = HTTPMethods.DELETE.rawValue
+        
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
 
         try await performVoidNetworkRequest(requestURL)
     }
