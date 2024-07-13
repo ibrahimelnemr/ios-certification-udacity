@@ -65,19 +65,38 @@ class UnimplementedJournalService: JournalService {
 
         case register
         case login
+        
         case trips
         case handleTrip(String)
+        
+        case events
+        case handleEvent(String)
+        
+        case media
+        case handleMedia(String)
 
         private var stringValue: String {
             switch self {
+
             case .register:
                 return EndPoints.base + "register"
             case .login:
                 return EndPoints.base + "token"
+            
             case .trips:
                 return EndPoints.base + "trips"
             case .handleTrip(let tripId):
                 return EndPoints.base + "trips/\(tripId)"
+                
+            case .events:
+                return EndPoints.base + "trips"
+            case .handleEvent(let eventId):
+                return EndPoints.base + "events/\(eventId)"
+                
+            case .media:
+                return EndPoints.base + "media"
+            case .handleMedia(let mediaId):
+                return EndPoints.base + "media/\(mediaId)"
             }
         }
 
@@ -203,12 +222,39 @@ class UnimplementedJournalService: JournalService {
     
     
 
-    func getTrip(withId _: Trip.ID) async throws -> Trip {
-        fatalError("Unimplemented getTrip")
+    func getTrip(withId tripId: Trip.ID) async throws -> Trip {
+        guard let token = token else {
+            throw NetworkError.invalidValue
+        }
+        
+        let url = EndPoints.handleTrip(tripId.description).url
+        var requestURL = URLRequest(url: url)
+        requestURL.httpMethod = HTTPMethods.GET.rawValue
+        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+        let trip = try await performNetworkRequest(requestURL, responseType: Trip.self)
+        
+        return trip
+        
     }
 
-    func updateTrip(withId _: Trip.ID, and _: TripUpdate) async throws -> Trip {
-        fatalError("Unimplemented updateTrip")
+    func updateTrip(withId tripId: Trip.ID, and trip: TripUpdate) async throws -> Trip {
+        guard let token = token else {
+            throw NetworkError.invalidValue
+        }
+        
+        let url = EndPoints.handleTrip(tripId.description).url
+        
+        var requestURL = URLRequest(url: url)
+        
+        requestURL.httpMethod = HTTPMethods.PUT.rawValue
+        
+        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+        let updatedTrip = try await performNetworkRequest(requestURL, responseType: Trip.self)
+        
+        return updatedTrip
+        
     }
 
     func deleteTrip(withId tripId: Trip.ID) async throws {
@@ -273,24 +319,119 @@ class UnimplementedJournalService: JournalService {
             throw NetworkError.badResponse
         }
     }
+    
 
-    func createEvent(with _: EventCreate) async throws -> Event {
+    func createEvent(with request: EventCreate) async throws -> Event {
         fatalError("Unimplemented createEvent")
+        
+        guard let token = token else {
+            throw NetworkError.invalidValue
+        }
+
+        var requestURL = URLRequest(url: EndPoints.events.url)
+        
+        requestURL.httpMethod = HTTPMethods.POST.rawValue
+        
+        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
+        
+        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime]
+
+        let eventData: [String: Any] = [
+            "name": request.name,
+            "date": dateFormatter.string(from: request.date),
+            "location": request.location,
+            "transition_from_previous": request.transitionFromPrevious
+        ]
+        requestURL.httpBody = try JSONSerialization.data(withJSONObject: eventData)
+
+        return try await performNetworkRequest(requestURL, responseType: Event.self)
+        
     }
 
-    func updateEvent(withId _: Event.ID, and _: EventUpdate) async throws -> Event {
-        fatalError("Unimplemented updateEvent")
+    func updateEvent(withId eventId: Event.ID, and _: EventUpdate) async throws -> Event {
+        
+        guard let token = token else {
+            throw NetworkError.invalidValue
+        }
+        
+        let url = EndPoints.handleEvent(eventId.description).url
+        
+        var requestURL = URLRequest(url: url)
+        
+        requestURL.httpMethod = HTTPMethods.PUT.rawValue
+        
+        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+        let updatedEvent = try await performNetworkRequest(requestURL, responseType: Event.self)
+        
+        return updatedEvent
+        
     }
 
-    func deleteEvent(withId _: Event.ID) async throws {
-        fatalError("Unimplemented deleteEvent")
+    func deleteEvent(withId eventId: Event.ID) async throws {
+        
+        guard let token = token else {
+            throw NetworkError.invalidValue
+        }
+        
+        let url = EndPoints.handleTrip(eventId.description).url
+        
+        var requestURL = URLRequest(url: url)
+        
+        requestURL.httpMethod = HTTPMethods.DELETE.rawValue
+        
+        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+
+        try await performVoidNetworkRequest(requestURL)
     }
 
-    func createMedia(with _: MediaCreate) async throws -> Media {
-        fatalError("Unimplemented createMedia")
+    func createMedia(with request: MediaCreate) async throws -> Media {
+        
+        guard let token = token else {
+            throw NetworkError.invalidValue
+        }
+
+        var requestURL = URLRequest(url: EndPoints.media.url)
+        
+        requestURL.httpMethod = HTTPMethods.POST.rawValue
+        
+        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
+        
+        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime]
+
+        let mediaData: [String: Any] = [
+            "caption": request.caption,
+            "base64_data": request.base64Data,
+            "event_id": request.eventId
+        ]
+        requestURL.httpBody = try JSONSerialization.data(withJSONObject: mediaData)
+
+        return try await performNetworkRequest(requestURL, responseType: Media.self)
     }
 
-    func deleteMedia(withId _: Media.ID) async throws {
-        fatalError("Unimplemented deleteMedia")
+    func deleteMedia(withId mediaId: Media.ID) async throws {
+        guard let token = token else {
+            throw NetworkError.invalidValue
+        }
+        
+        let url = EndPoints.handleMedia(mediaId.description).url
+        
+        var requestURL = URLRequest(url: url)
+        
+        requestURL.httpMethod = HTTPMethods.DELETE.rawValue
+        
+        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+
+        try await performVoidNetworkRequest(requestURL)
     }
 }

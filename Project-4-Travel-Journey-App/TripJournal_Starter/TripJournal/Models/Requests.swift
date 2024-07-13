@@ -18,6 +18,7 @@ struct TripUpdate {
 struct MediaCreate {
     let eventId: Event.ID
     let base64Data: Data
+    let caption: String?
 }
 
 /// An object that can be used to create a new event.
