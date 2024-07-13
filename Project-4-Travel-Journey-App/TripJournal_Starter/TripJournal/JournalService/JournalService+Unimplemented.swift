@@ -539,21 +539,23 @@ class UnimplementedJournalService: JournalService {
 
     func createMedia(with request: MediaCreate) async throws -> Media {
         
-        guard let token = token else {
-            throw NetworkError.invalidValue
-        }
+//        guard let token = token else {
+//            throw NetworkError.invalidValue
+//        }
         
-        print(EndPoints.media.url)
+        var requestURL = try createURLRequest(url: EndPoints.media.url, httpMethod: HTTPMethods.POST)
+        
+//        print(EndPoints.media.url)
 
-        var requestURL = URLRequest(url: EndPoints.media.url)
+//        var requestURL = URLRequest(url: EndPoints.media.url)
         
-        requestURL.httpMethod = HTTPMethods.POST.rawValue
+//        requestURL.httpMethod = HTTPMethods.POST.rawValue
         
-        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
+//        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.accept.rawValue)
         
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
         
-        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+//        requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
         
         let base64String = request.base64Data.base64EncodedString()
 
