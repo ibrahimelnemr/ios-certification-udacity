@@ -20,6 +20,7 @@ async def create_event(
     db=Depends(get_db),
     user=Depends(get_current_user),
 ):
+    print(request)
     db_trip = __get_trip(event.trip_id, db, user.id)
     if not db_trip:
         raise HTTPException(status_code=404, detail="Trip not found")
