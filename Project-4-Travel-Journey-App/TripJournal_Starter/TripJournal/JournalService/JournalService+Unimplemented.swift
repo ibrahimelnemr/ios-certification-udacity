@@ -225,17 +225,12 @@ class UnimplementedJournalService: JournalService {
         print("Access token: ")
         print(token.accessToken)
         
-        let (data, _) = try await URLSession.shared.data(for: requestURL)
-
-//        let responseObject = try JSONDecoder.decode([Trip].self, from: data)
 
 
         do {
             
             print("Journalservice getTrips: attempting to get trips")
-            let res = try await performVoidNetworkRequest(requestURL)
-            print("generic response: ")
-            print(res)
+
             
             let trips = try await performNetworkRequest(requestURL, responseType: [Trip].self)
             print("Trips: ")
