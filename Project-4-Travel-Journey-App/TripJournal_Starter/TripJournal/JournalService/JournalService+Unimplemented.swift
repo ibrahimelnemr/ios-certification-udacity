@@ -300,9 +300,12 @@ class UnimplementedJournalService: JournalService {
     }
 
     func updateTrip(withId tripId: Trip.ID, and trip: TripUpdate) async throws -> Trip {
+        
         guard let token = token else {
             throw NetworkError.invalidValue
         }
+        
+//        var requestURL = try createURLRequest(url: EndPoints.handleTrip(tripId.description).url, httpMethod: HTTPMethods.GET)
         
         let url = EndPoints.handleTrip(tripId.description).url
         
@@ -311,6 +314,17 @@ class UnimplementedJournalService: JournalService {
         requestURL.httpMethod = HTTPMethods.PUT.rawValue
         
         requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+        
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime]
+
+        let tripData: [String: Any] = [
+            "name": trip.name,
+            "start_date": dateFormatter.string(from: trip.startDate),
+            "end_date": dateFormatter.string(from: trip.endDate)
+        ]
+        
+        requestURL.httpBody = try JSONSerialization.data(withJSONObject: tripData)
         
         let updatedTrip = try await performNetworkRequest(requestURL, responseType: Trip.self)
         
