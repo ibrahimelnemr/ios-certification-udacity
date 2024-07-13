@@ -445,12 +445,22 @@ class UnimplementedJournalService: JournalService {
         requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
         
         requestURL.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+        
+        let base64String = request.base64Data.base64EncodedString()
 
         let mediaData: [String: Any] = [
 //            "caption": request.caption,
-            "base64_data": request.base64Data,
+            "base64_data": base64String,
             "event_id": request.eventId
         ]
+        
+        guard JSONSerialization.isValidJSONObject(mediaData) else {
+            print("createMedia - cannot serialize object: ")
+            print(mediaData)
+            throw NetworkError.invalidValue
+        }
+
+        
         requestURL.httpBody = try JSONSerialization.data(withJSONObject: mediaData)
 
         return try await performNetworkRequest(requestURL, responseType: Media.self)
