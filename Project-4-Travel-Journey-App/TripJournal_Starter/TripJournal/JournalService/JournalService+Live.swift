@@ -38,7 +38,7 @@ extension SessionError: LocalizedError {
 
 
 /// An unimplemented version of the `JournalService`.
-class UnimplementedJournalService: JournalService {
+class LiveJournalService: JournalService {
     
     var tokenExpired: Bool = false
 

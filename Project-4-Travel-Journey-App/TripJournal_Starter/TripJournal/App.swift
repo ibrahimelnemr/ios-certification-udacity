@@ -6,12 +6,12 @@ struct TripJournalApp: App {
         WindowGroup {
             #warning("Replace the mock service with a live implementation that talks with the API.")
 //            RootView(service: MockJournalServic/e(delay: 0.25))
-            RootView(service: UnimplementedJournalService())
+            RootView(service: LiveJournalService())
         }
     }
 }
 
 #Preview {
-    RootView(service: UnimplementedJournalService())
+    RootView(service: LiveJournalService())
     //            RootView(service: MockJournalServic/e(delay: 0.25))
 }
