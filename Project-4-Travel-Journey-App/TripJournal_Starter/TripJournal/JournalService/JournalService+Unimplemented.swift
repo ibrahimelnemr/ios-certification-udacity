@@ -330,9 +330,9 @@ class UnimplementedJournalService: JournalService {
             throw NetworkError.badResponse
         }
         
-        print(data)
-        print(response)
-        print(httpResponse)
+//        print(data)
+//        print(response)
+//        print(httpResponse)
 
         do {
             let decoder = JSONDecoder()
@@ -477,6 +477,8 @@ class UnimplementedJournalService: JournalService {
         guard let token = token else {
             throw NetworkError.invalidValue
         }
+        
+        print(EndPoints.media.url)
 
         var requestURL = URLRequest(url: EndPoints.media.url)
         
@@ -509,6 +511,10 @@ class UnimplementedJournalService: JournalService {
     }
 
     func deleteMedia(withId mediaId: Media.ID) async throws {
+        
+        print("journalservice - deleteMedia()")
+        
+        
         guard let token = token else {
             throw NetworkError.invalidValue
         }
@@ -516,6 +522,8 @@ class UnimplementedJournalService: JournalService {
         let url = EndPoints.handleMedia(mediaId.description).url
         
         var requestURL = URLRequest(url: url)
+        
+        print(requestURL)
         
         requestURL.httpMethod = HTTPMethods.DELETE.rawValue
         
