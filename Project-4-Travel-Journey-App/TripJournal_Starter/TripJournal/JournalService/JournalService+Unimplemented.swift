@@ -463,13 +463,15 @@ class UnimplementedJournalService: JournalService {
             throw NetworkError.invalidValue
         }
         
-        let url = EndPoints.handleEvent(eventId.description).url
+        var requestURL = try createURLRequest(url: EndPoints.handleEvent(eventId.description).url, httpMethod: HTTPMethods.PUT)
         
-        var requestURL = URLRequest(url: url)
+//        let url = EndPoints.handleEvent(eventId.description).url
         
-        requestURL.httpMethod = HTTPMethods.PUT.rawValue
+//        var requestURL = URLRequest(url: url)
         
-        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
+//        requestURL.httpMethod = HTTPMethods.PUT.rawValue
+        
+//        requestURL.addValue("Bearer \(token.accessToken)", forHTTPHeaderField: HTTPHeaders.authorization.rawValue)
         
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime]
