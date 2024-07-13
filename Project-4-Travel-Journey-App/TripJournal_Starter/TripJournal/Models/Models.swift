@@ -34,11 +34,11 @@ struct Trip: Identifiable, Sendable, Hashable, Codable {
     var endDate: Date
     var events: [Event]
     
-//    enum CodingKeys: String, CodingKey {
-//        case id, name
-//        case startDate = "start_date"
-//        case endDate = "end_date"
-//    }
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case startDate = "start_date"
+        case endDate = "end_date"
+    }
 
 }
 

@@ -133,14 +133,21 @@ struct TripList: View {
 
     private func fetchTrips() async {
         if trips.isEmpty {
+            print("TripList: @State trips are empty")
             isLoading = true
         }
         error = nil
         do {
+            print("TripList: fetching trips from journalservice, setting to @State trips")
             trips = try await journalService.getTrips()
         } catch {
+            print("TripList: error fetching trips")
             self.error = error
+            print(self.error)
         }
+        print("TripList: Succeeded in fetching trips from journalservice and setting to state variable")
+        print("trips: ")
+        print(trips)
         isLoading = false
     }
 

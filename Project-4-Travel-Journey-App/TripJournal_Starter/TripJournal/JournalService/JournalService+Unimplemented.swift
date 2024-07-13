@@ -89,7 +89,7 @@ class UnimplementedJournalService: JournalService {
                 return EndPoints.base + "trips/\(tripId)"
                 
             case .events:
-                return EndPoints.base + "trips"
+                return EndPoints.base + "events"
             case .handleEvent(let eventId):
                 return EndPoints.base + "events/\(eventId)"
                 
@@ -224,11 +224,29 @@ class UnimplementedJournalService: JournalService {
         
         print("Access token: ")
         print(token.accessToken)
+        
+        let (data, _) = try await URLSession.shared.data(for: requestURL)
+
+        let responseObject = try JSONDecoder.decode([Trip].self, from: data)
+
 
         do {
+            
+            print("Journalservice getTrips: attempting to get trips")
+            let res = try await performVoidNetworkRequest(requestURL)
+            print("generic response: ")
+            print(res)
+            
             let trips = try await performNetworkRequest(requestURL, responseType: [Trip].self)
+            print("Trips: ")
+            print(trips)
+            
+            print("saving trips to cache")
             tripCacheManager.saveTrips(trips)
+            print("trips saved to cache successfully")
+            
             return trips
+            print("journalservice: getTrips - returned trips")
         } catch {
             print("Fetching trips failed, loading from UserDefaults")
             return tripCacheManager.loadTrips()
