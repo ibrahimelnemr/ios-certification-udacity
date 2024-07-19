@@ -11,11 +11,10 @@ final class Category: Identifiable, Hashable {
     
     var id = UUID()
     
-    @Attribute(.unique)
+//    @Attribute(.unique)
     var name: String
     
-    @Relationship(inverse: \Recipe.category)
-    var recipes: [Recipe]/*?*/
+    var recipes: [Recipe]?
     
     init(id: UUID = UUID(), name: String) {
         self.id = id
@@ -36,7 +35,7 @@ final class Category: Identifiable, Hashable {
 final class Ingredient: Identifiable, Hashable {
     var id = UUID()
     
-    @Attribute(.unique)
+//    @Attribute(.unique)
     var name: String
     
     init(id: UUID = UUID(), name: String) {
@@ -62,14 +61,10 @@ final class RecipeIngredient : Identifiable, Hashable {
     
     var quantity: String
     
-//    @Relationship(deleteRule: .cascade)
-//    var recipe: Recipe
-    
-    init(id: UUID = UUID(), ingredient: Ingredient, quantity: String /*recipe: Recipe*/) {
+    init(id: UUID = UUID(), ingredient: Ingredient, quantity: String) {
         self.id = id
         self.ingredient = ingredient
         self.quantity = quantity
-//        self.recipe = recipe
     }
     
     static func == (lhs: RecipeIngredient, rhs: RecipeIngredient) -> Bool {
@@ -86,12 +81,12 @@ final class Recipe: Identifiable, Hashable {
     
     var id = UUID()
     
-    @Attribute(.unique)
+//    @Attribute(.unique)
     var name: String
     
     var summary: String
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify, inverse: \Category.recipes)
     var category: Category?
     
     var serving: Int
@@ -102,8 +97,9 @@ final class Recipe: Identifiable, Hashable {
     
     var imageData: Data?
     
+//    @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
     @Relationship(deleteRule: .cascade)
-    var ingredients: [RecipeIngredient]/*?*/
+    var ingredients: [RecipeIngredient]
     
     init(
         id: UUID = UUID(),
@@ -112,7 +108,7 @@ final class Recipe: Identifiable, Hashable {
         category: Category?,
         serving: Int,
         time: Int,
-//        ingredients: [RecipeIngredient]?,
+        ingredients: [RecipeIngredient] = [],
         instructions: String,
         imageData: Data?) {
             self.id = id
@@ -121,8 +117,7 @@ final class Recipe: Identifiable, Hashable {
             self.category = category
             self.serving = serving
             self.time = time
-//            self.ingredients = ingredients
-            self.ingredients = []
+            self.ingredients = ingredients
             self.instructions = instructions
             self.imageData = imageData
         }
