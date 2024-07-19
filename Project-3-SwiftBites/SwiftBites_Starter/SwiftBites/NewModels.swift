@@ -57,11 +57,11 @@ final class RecipeIngredient : Identifiable, Hashable {
     
     var id = UUID()
     
-    var ingredient: Ingredient
+    var ingredient: Ingredient?
     
     var quantity: String
     
-    init(id: UUID = UUID(), ingredient: Ingredient, quantity: String) {
+    init(id: UUID = UUID(), ingredient: Ingredient? = nil, quantity: String) {
         self.id = id
         self.ingredient = ingredient
         self.quantity = quantity

@@ -125,6 +125,8 @@ struct IngredientsView: View {
         if let selection {
             Button(
                 action: {
+                    print("IngredientsView - #ViewBuilder row()")
+                    print("\tCalling selection function for ingredient: \(ingredient.name)")
                     selection(ingredient)
                     dismiss()
                 },

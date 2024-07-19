@@ -93,35 +93,23 @@ struct RecipeForm: View {
     
     private func ingredientPicker() -> some View {
         IngredientsView { selectedIngredient in
-//            let recipeIngredient = MockRecipeIngredient(ingredient: selectedIngredient, quantity: "")
-//            ingredients.append(recipeIngredient)
-            let selectedId = selectedIngredient.id
             
-            let predicate = #Predicate<Ingredient> {
-                $0.id == selectedId
-            }
+            print("RecipeForm - ingredientPicker()")
             
-            let descriptor = FetchDescriptor<Ingredient>(
-                predicate: predicate
-            )
+            print("\tSelected ingredient: \(selectedIngredient.name), ID: \(selectedIngredient.id)")
+                        
+            print("\tAttempting to create recipeIngredient with selectedIngredient")
             
-            let searchedIngredients = try? context.fetch(descriptor)
+            let recipeIngredient = RecipeIngredient(quantity: "")
             
-            for ingredient in searchedIngredients! {
-                print(ingredient.id)
-                print(ingredient.name)
-            }
+            recipeIngredient.ingredient = selectedIngredient
             
-            let foundIngredient = searchedIngredients![0]
+            print("\tRecipeForm - adding \(recipeIngredient.ingredient!.name) to recipe.")
             
-            print(selectedIngredient.id)
-            
-//            let recipeIngredient = RecipeIngredient(ingredient: foundIngredient, quantity: "")
-            
-//            ingredients.append(recipeIngredient)
-//            ingredients.append(foundIngredient)
-//            Text("ingredients picker (needs implementation)")
+            ingredients.append(recipeIngredient)
+
         }
+        
     }
     
     @ViewBuilder
@@ -218,6 +206,7 @@ struct RecipeForm: View {
                     },
                     actions: {
                         Button("Add Ingredient") {
+                            print("ingredientsSection - Add ingredient (ingredients empty")
                             isIngredientsPickerPresented = true
                         }
                     }
@@ -225,7 +214,7 @@ struct RecipeForm: View {
             } else {
                 ForEach(ingredients) { ingredient in
                     HStack(alignment: .center) {
-                        Text(ingredient.ingredient.name)
+                        Text(ingredient.ingredient!.name)
                             .bold()
                             .layoutPriority(2)
                         Spacer()
@@ -234,6 +223,7 @@ struct RecipeForm: View {
                                 ingredient.quantity
                             },
                             set: { quantity in
+                                
                                 if let index = ingredients.firstIndex(where: { $0.id == ingredient.id }) {
                                     ingredients[index].quantity = quantity
                                 }
@@ -245,6 +235,7 @@ struct RecipeForm: View {
                 .onDelete(perform: deleteIngredients)
                 
                 Button("Add Ingredient") {
+                    print("ingredientsSection - Add Ingredient button (ingredients not empty")
                     isIngredientsPickerPresented = true
                 }
             }
@@ -307,6 +298,7 @@ struct RecipeForm: View {
     
     func save() {
 //        let category = storage.categories.first(where: { $0.id == categoryId })
+        print("RecipeForm - save()")
         let category = categories.first(where: { $0.id == categoryId })
         
         do {
@@ -323,22 +315,23 @@ struct RecipeForm: View {
 //                    imageData: imageData
 //                )
                 
+                print("\tAttempting to create new recipe to save")
                 let recipe = Recipe (
                     name: name,
                     summary: summary,
                     category: category,
                     serving: serving,
                     time: time,
-//                    ingredients: ingredients,
+                    ingredients: ingredients,
                     instructions: instructions,
                     imageData: imageData
                 )
                 
-                recipe.ingredients = ingredients
+//                recipe.ingredients = ingredients
                 
                 try context.insert(recipe)
                 
-                print("RecipeForm - adding recipe with name: \(recipe.name)")
+                print("\tRecipeForm - successfully saved recipe with name: \(recipe.name)")
                 
 //                print("RecipeForm - add recipe (needs implementation)")
             case .edit(let recipe):
