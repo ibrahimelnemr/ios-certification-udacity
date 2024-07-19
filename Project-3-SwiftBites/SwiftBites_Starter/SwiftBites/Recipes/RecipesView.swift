@@ -20,6 +20,7 @@ struct RecipesView: View {
 
               do {
                   let filteredRecipes = try context.fetch(descriptor)
+                      .sorted(using: sortOrder)
                   return filteredRecipes
               } catch {
                   return []
@@ -80,14 +81,14 @@ struct RecipesView: View {
         if recipes.isEmpty {
             empty
         } else {
-            list(for: recipes.filter {
-                if query.isEmpty {
-                    return true
-                } else {
-                    return $0.name.localizedStandardContains(query) || $0.summary.localizedStandardContains(query)
-                }
-            }.sorted(using: sortOrder))
-//            list(for: filteredRecipes)
+//            list(for: recipes.filter {
+//                if query.isEmpty {
+//                    return true
+//                } else {
+//                    return $0.name.localizedStandardContains(query) || $0.summary.localizedStandardContains(query)
+//                }
+//            }.sorted(using: sortOrder))
+            list(for: filteredRecipes)
         }
     }
     
