@@ -13,11 +13,12 @@ class NewStorageContainer {
         let schema = Schema([Category.self, Ingredient.self, RecipeIngredient.self, Recipe.self])
         let configuration = ModelConfiguration()
         let container = try! ModelContainer(for: schema, configurations: configuration)
-        if isEmpty(context: container.mainContext) {
-            loadSampleData(context: container.mainContext)
-        }
+//        if isEmpty(context: container.mainContext) {
+//            loadSampleData(context: container.mainContext)
+//        }
         // re-load sample data for testing
-//        loadSampleData(context: container.mainContext)
+        deleteSampleData(context: container.mainContext)
+        loadSampleData(context: container.mainContext)
         return container
     }
     
@@ -30,6 +31,41 @@ class NewStorageContainer {
             return false
         }
     }
+    
+    private static func deleteSampleData(context: ModelContext) {
+        let categoryDescriptor = FetchDescriptor<Category>()
+        let ingredientDescriptor = FetchDescriptor<Ingredient>()
+        let recipeDescriptor = FetchDescriptor<Recipe>()
+        let recipeIngredientDescriptor = FetchDescriptor<RecipeIngredient>()
+        
+        do {
+            let categories = try context.fetch(categoryDescriptor)
+            for category in categories {
+                context.delete(category)
+            }
+            
+            let ingredients = try context.fetch(ingredientDescriptor)
+            for ingredient in ingredients {
+                context.delete(ingredient)
+            }
+            
+            let recipes = try context.fetch(recipeDescriptor)
+            for recipe in recipes {
+                context.delete(recipe)
+            }
+            
+            let recipeIngredients = try context.fetch(recipeIngredientDescriptor)
+            for recipeIngredient in recipeIngredients {
+                context.delete(recipeIngredient)
+            }
+            
+            try context.save()
+            print("All data deleted.")
+        } catch {
+            print("Error deleting data: \(error.localizedDescription)")
+        }
+    }
+
     
     private static func loadSampleData(context: ModelContext) {
         let pizzaDough = Ingredient(name: "Pizza Dough")
@@ -71,7 +107,14 @@ class NewStorageContainer {
             category: italian,
             serving: 4,
             time: 50,
-//            ingredients: [],
+            ingredients: [
+                RecipeIngredient(ingredient: pizzaDough, quantity: "1 ball"),
+                RecipeIngredient(ingredient: tomatoSauce, quantity: "1/2 cup"),
+                RecipeIngredient(ingredient: mozzarellaCheese, quantity: "1 cup, shredded"),
+                RecipeIngredient(ingredient: freshBasilLeaves, quantity: "A handful"),
+                RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoon2"),
+                RecipeIngredient(ingredient: salt, quantity: "Pinch")
+            ],
             instructions: "Preheat oven, roll out dough, apply sauce, add cheese and basil, bake for 20 minutes.",
             imageData: UIImage(named: "margherita")?.pngData()
         )
@@ -85,14 +128,14 @@ class NewStorageContainer {
 //            RecipeIngredient(ingredient: salt, quantity: "Pinch", recipe: margherita)
 //        ]
         
-        margherita.ingredients = [
-            RecipeIngredient(ingredient: pizzaDough, quantity: "1 ball"),
-            RecipeIngredient(ingredient: tomatoSauce, quantity: "1/2 cup"),
-            RecipeIngredient(ingredient: mozzarellaCheese, quantity: "1 cup, shredded"),
-            RecipeIngredient(ingredient: freshBasilLeaves, quantity: "A handful"),
-            RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons"),
-            RecipeIngredient(ingredient: salt, quantity: "Pinch")
-        ]
+//        margherita.ingredients = [
+//            RecipeIngredient(ingredient: pizzaDough, quantity: "1 ball"),
+//            RecipeIngredient(ingredient: tomatoSauce, quantity: "1/2 cup"),
+//            RecipeIngredient(ingredient: mozzarellaCheese, quantity: "1 cup, shredded"),
+//            RecipeIngredient(ingredient: freshBasilLeaves, quantity: "A handful"),
+//            RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons"),
+//            RecipeIngredient(ingredient: salt, quantity: "Pinch")
+//        ]
         
         
         let spaghettiCarbonara = Recipe(
@@ -101,7 +144,14 @@ class NewStorageContainer {
             category: italian,
             serving: 4,
             time: 30,
-//            ingredients: [],
+            ingredients: [
+                RecipeIngredient(ingredient: spaghetti, quantity: "400g"),
+                RecipeIngredient(ingredient: eggs, quantity: "4"),
+                RecipeIngredient(ingredient: parmesanCheese, quantity: "1 cup, grated"),
+                RecipeIngredient(ingredient: pancetta, quantity: "200g, diced"),
+                RecipeIngredient(ingredient: blackPepper, quantity: "To taste"),
+                RecipeIngredient(ingredient: salt, quantity: "To taste")
+            ],
             instructions: "Cook spaghetti. Fry pancetta until crisp. Whisk eggs and Parmesan, add to pasta with pancetta, and season with black pepper.",
             imageData: UIImage(named: "spaghettiCarbonara")?.pngData()
         )
@@ -115,14 +165,14 @@ class NewStorageContainer {
 //            RecipeIngredient(ingredient: salt, quantity: "To taste", recipe: spaghettiCarbonara)
 //        ]
 //        
-        spaghettiCarbonara.ingredients = [
-             RecipeIngredient(ingredient: spaghetti, quantity: "400g"),
-             RecipeIngredient(ingredient: eggs, quantity: "4"),
-             RecipeIngredient(ingredient: parmesanCheese, quantity: "1 cup, grated"),
-             RecipeIngredient(ingredient: pancetta, quantity: "200g, diced"),
-             RecipeIngredient(ingredient: blackPepper, quantity: "To taste"),
-             RecipeIngredient(ingredient: salt, quantity: "To taste")
-         ]
+//        spaghettiCarbonara.ingredients = [
+//             RecipeIngredient(ingredient: spaghetti, quantity: "400g"),
+//             RecipeIngredient(ingredient: eggs, quantity: "4"),
+//             RecipeIngredient(ingredient: parmesanCheese, quantity: "1 cup, grated"),
+//             RecipeIngredient(ingredient: pancetta, quantity: "200g, diced"),
+//             RecipeIngredient(ingredient: blackPepper, quantity: "To taste"),
+//             RecipeIngredient(ingredient: salt, quantity: "To taste")
+//         ]
         
         let hummus = Recipe(
             name: "Classic Hummus",
@@ -130,7 +180,18 @@ class NewStorageContainer {
             category: middleEastern,
             serving: 6,
             time: 10,
-//            ingredients: [],
+            ingredients: [
+                RecipeIngredient(ingredient: chickpeas, quantity: "1 can (15 oz)"),
+                RecipeIngredient(ingredient: tahini, quantity: "1/4 cup"),
+                RecipeIngredient(ingredient: lemonJuice, quantity: "3 tablespoons"),
+                RecipeIngredient(ingredient: garlic, quantity: "1 clove, minced"),
+                RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons"),
+                RecipeIngredient(ingredient: cumin, quantity: "1/2 teaspoon"),
+                RecipeIngredient(ingredient: salt, quantity: "To taste"),
+                RecipeIngredient(ingredient: water, quantity: "2-3 tablespoons"),
+                RecipeIngredient(ingredient: paprika, quantity: "For garnish"),
+                RecipeIngredient(ingredient: parsley, quantity: "For garnish")
+            ],
             instructions: "Blend chickpeas, tahini, lemon juice, garlic, and spices. Adjust consistency with water. Garnish with olive oil, paprika, and parsley.",
             imageData: UIImage(named: "hummus")?.pngData()
         )
@@ -148,18 +209,18 @@ class NewStorageContainer {
 //            RecipeIngredient(ingredient: parsley, quantity: "For garnish", recipe: hummus)
 //        ]
         
-        hummus.ingredients = [
-            RecipeIngredient(ingredient: chickpeas, quantity: "1 can (15 oz)"),
-            RecipeIngredient(ingredient: tahini, quantity: "1/4 cup"),
-            RecipeIngredient(ingredient: lemonJuice, quantity: "3 tablespoons"),
-            RecipeIngredient(ingredient: garlic, quantity: "1 clove, minced"),
-            RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons"),
-            RecipeIngredient(ingredient: cumin, quantity: "1/2 teaspoon"),
-            RecipeIngredient(ingredient: salt, quantity: "To taste"),
-            RecipeIngredient(ingredient: water, quantity: "2-3 tablespoons"),
-            RecipeIngredient(ingredient: paprika, quantity: "For garnish"),
-            RecipeIngredient(ingredient: parsley, quantity: "For garnish")
-        ]
+//        hummus.ingredients = [
+//            RecipeIngredient(ingredient: chickpeas, quantity: "1 can (15 oz)"),
+//            RecipeIngredient(ingredient: tahini, quantity: "1/4 cup"),
+//            RecipeIngredient(ingredient: lemonJuice, quantity: "3 tablespoons"),
+//            RecipeIngredient(ingredient: garlic, quantity: "1 clove, minced"),
+//            RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons"),
+//            RecipeIngredient(ingredient: cumin, quantity: "1/2 teaspoon"),
+//            RecipeIngredient(ingredient: salt, quantity: "To taste"),
+//            RecipeIngredient(ingredient: water, quantity: "2-3 tablespoons"),
+//            RecipeIngredient(ingredient: paprika, quantity: "For garnish"),
+//            RecipeIngredient(ingredient: parsley, quantity: "For garnish")
+//        ]
         
         let falafel = Recipe(
             name: "Classic Falafel",
@@ -167,7 +228,17 @@ class NewStorageContainer {
             category: middleEastern,
             serving: 4,
             time: 60,
-//            ingredients: [],
+            ingredients: [
+                RecipeIngredient(ingredient: driedChickpeas, quantity: "1 cup"),
+                RecipeIngredient(ingredient: onions, quantity: "1 medium, chopped"),
+                RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
+                RecipeIngredient(ingredient: cilantro, quantity: "1/2 cup, chopped"),
+                RecipeIngredient(ingredient: parsley, quantity: "1/2 cup, chopped"),
+                RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
+                RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
+                RecipeIngredient(ingredient: salt, quantity: "1 tsp"),
+                RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp")
+            ],
             instructions: "Soak chickpeas overnight. Blend with onions, garlic, herbs, and spices. Form into balls, add baking powder, and fry until golden.",
             imageData: UIImage(named: "falafel")?.pngData()
         )
@@ -184,17 +255,17 @@ class NewStorageContainer {
 //            RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp", recipe: falafel)
 //        ]
         
-        falafel.ingredients = [
-            RecipeIngredient(ingredient: driedChickpeas, quantity: "1 cup"),
-            RecipeIngredient(ingredient: onions, quantity: "1 medium, chopped"),
-            RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
-            RecipeIngredient(ingredient: cilantro, quantity: "1/2 cup, chopped"),
-            RecipeIngredient(ingredient: parsley, quantity: "1/2 cup, chopped"),
-            RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
-            RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
-            RecipeIngredient(ingredient: salt, quantity: "1 tsp"),
-            RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp")
-        ]
+//        falafel.ingredients = [
+//            RecipeIngredient(ingredient: driedChickpeas, quantity: "1 cup"),
+//            RecipeIngredient(ingredient: onions, quantity: "1 medium, chopped"),
+//            RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
+//            RecipeIngredient(ingredient: cilantro, quantity: "1/2 cup, chopped"),
+//            RecipeIngredient(ingredient: parsley, quantity: "1/2 cup, chopped"),
+//            RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
+//            RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
+//            RecipeIngredient(ingredient: salt, quantity: "1 tsp"),
+//            RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp")
+//        ]
 
         
         let shawarma = Recipe(
@@ -203,7 +274,20 @@ class NewStorageContainer {
             category: middleEastern,
             serving: 4,
             time: 120,
-//            ingredients: [],
+            ingredients: [
+                RecipeIngredient(ingredient: chickenThighs, quantity: "1 kg, boneless"),
+                RecipeIngredient(ingredient: yogurt, quantity: "1 cup"),
+                RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
+                RecipeIngredient(ingredient: lemonJuice, quantity: "3 tablespoons"),
+                RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
+                RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
+                RecipeIngredient(ingredient: cardamom, quantity: "1/2 tsp"),
+                RecipeIngredient(ingredient: cinnamon, quantity: "1/2 tsp"),
+                RecipeIngredient(ingredient: turmeric, quantity: "1/2 tsp"),
+                RecipeIngredient(ingredient: salt, quantity: "To taste"),
+                RecipeIngredient(ingredient: blackPepper, quantity: "To taste"),
+                RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons")
+            ],
             instructions: "Marinate chicken with yogurt, spices, garlic, lemon juice, and olive oil. Roast until cooked. Serve with pita and sauces.",
             imageData: UIImage(named: "chickenShawarma")?.pngData()
         )
@@ -222,23 +306,24 @@ class NewStorageContainer {
 //            RecipeIngredient(ingredient: blackPepper, quantity: "To taste", recipe: shawarma),
 //            RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons", recipe: shawarma)
 //        ]
-        shawarma.ingredients = [
-            RecipeIngredient(ingredient: chickenThighs, quantity: "1 kg, boneless"),
-            RecipeIngredient(ingredient: yogurt, quantity: "1 cup"),
-            RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
-            RecipeIngredient(ingredient: lemonJuice, quantity: "3 tablespoons"),
-            RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
-            RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
-            RecipeIngredient(ingredient: cardamom, quantity: "1/2 tsp"),
-            RecipeIngredient(ingredient: cinnamon, quantity: "1/2 tsp"),
-            RecipeIngredient(ingredient: turmeric, quantity: "1/2 tsp"),
-            RecipeIngredient(ingredient: salt, quantity: "To taste"),
-            RecipeIngredient(ingredient: blackPepper, quantity: "To taste"),
-            RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons")
-        ]
+//        shawarma.ingredients = [
+//            RecipeIngredient(ingredient: chickenThighs, quantity: "1 kg, boneless"),
+//            RecipeIngredient(ingredient: yogurt, quantity: "1 cup"),
+//            RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
+//            RecipeIngredient(ingredient: lemonJuice, quantity: "3 tablespoons"),
+//            RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
+//            RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
+//            RecipeIngredient(ingredient: cardamom, quantity: "1/2 tsp"),
+//            RecipeIngredient(ingredient: cinnamon, quantity: "1/2 tsp"),
+//            RecipeIngredient(ingredient: turmeric, quantity: "1/2 tsp"),
+//            RecipeIngredient(ingredient: salt, quantity: "To taste"),
+//            RecipeIngredient(ingredient: blackPepper, quantity: "To taste"),
+//            RecipeIngredient(ingredient: extraVirginOliveOil, quantity: "2 tablespoons")
+//        ]
         
-        italian.recipes = [margherita, spaghettiCarbonara]
-        middleEastern.recipes = [hummus, falafel, shawarma]
+//        CAUSES ERROR as this is automatically handled by swiftdata due to the @Relationship inverse notation on recipe
+//        italian.recipes = [margherita, spaghettiCarbonara]
+//        middleEastern.recipes = [hummus, falafel, shawarma]
         
         let ingredients = [
             pizzaDough, tomatoSauce, mozzarellaCheese, freshBasilLeaves, extraVirginOliveOil, salt,
@@ -249,7 +334,7 @@ class NewStorageContainer {
         
         let categories = [italian, middleEastern]
         let recipes = [margherita, spaghettiCarbonara, hummus, falafel, shawarma]
-        
+
         for ingredient in ingredients {
             context.insert(ingredient)
         }
