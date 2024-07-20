@@ -87,6 +87,10 @@ struct IngredientForm: View {
         }
         
         print("\tIngredient deleted: \(ingredient.name)")
+        
+        print("Current RecipeIngredients: ")
+        NewStorageContainer.printSampleData(context: context, printRecipeIngredientsOnly: true)
+        
         dismiss()
     }
     
@@ -100,7 +104,11 @@ struct IngredientForm: View {
                 
                 try context.insert(Ingredient(name: name))
                 
+                print("\tAttempting to save context")
+                
                 try context.save()
+                
+                print("\tIngredient saved successfully")
 
             case .edit(let ingredient):
 //                try storage.updateIngredient(id: ingredient.id, name: name)
