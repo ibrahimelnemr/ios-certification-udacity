@@ -38,6 +38,8 @@ final class Ingredient: Identifiable, Hashable {
 //    @Attribute(.unique)
     var name: String
     
+    var recipeIngredients: [RecipeIngredient]?
+    
     init(id: UUID = UUID(), name: String) {
         self.id = id
         self.name = name
@@ -57,6 +59,7 @@ final class RecipeIngredient : Identifiable, Hashable {
     
     var id = UUID()
     
+    @Relationship(deleteRule: .nullify, inverse: \Ingredient.recipeIngredients)
     var ingredient: Ingredient?
     
 //    var recipe: Recipe?
