@@ -86,7 +86,7 @@ class NewStorageContainer {
         }
     }
 
-    public static func printSampleData(context: ModelContext) {
+    public static func printSampleData(context: ModelContext, printAll: Bool=false, printCategoriesOnly: Bool = false, printIngredientsOnly: Bool = false, printRecipesOnly: Bool = false, printRecipeIngredientsOnly: Bool = false) {
         print("NewStorageContainer - printSampleData()")
         let categoryDescriptor = FetchDescriptor<Category>()
         let ingredientDescriptor = FetchDescriptor<Ingredient>()
@@ -96,41 +96,57 @@ class NewStorageContainer {
         print("PRINTING SAMPLE DATA")
         
         do {
-            let categories = try context.fetch(categoryDescriptor)
             
-            print("CATEGORIES")
-            for category in categories {
-                print("\tCategory")
-                print("\t\t\(category.name)")
-                for recipe in category.recipes ?? [] {
-                    print("\t\t\t\(recipe.name)")
+            if (printAll || printCategoriesOnly) {
+                
+                let categories = try context.fetch(categoryDescriptor)
+                
+                print("CATEGORIES")
+                
+                for category in categories {
+                    print("\tCategory")
+                    print("\t\t\(category.name)")
+                    for recipe in category.recipes ?? [] {
+                        print("\t\t\t\(recipe.name)")
+                    }
                 }
             }
             
-            print("INGREDIENTS")
-            let ingredients = try context.fetch(ingredientDescriptor)
-            for ingredient in ingredients {
-                print("\tIngredient")
-                print("\t\t\(ingredient.name)")
+            if (printAll || printIngredientsOnly) {
+            
+                print("INGREDIENTS")
+                let ingredients = try context.fetch(ingredientDescriptor)
+                for ingredient in ingredients {
+                    print("\tIngredient")
+                    print("\t\t\(ingredient.name)")
+                }
             }
             
-            let recipes = try context.fetch(recipeDescriptor)
             
-            print("RECIPES")
-            for recipe in recipes {
-                print("\tRecipe")
-                print("\t\t\(recipe.name)")
-                print("\t\t\tCategory: \(recipe.category?.name ?? "N/A")")
+            if (printAll || printRecipesOnly) {
+                let recipes = try context.fetch(recipeDescriptor)
+                
+                print("RECIPES")
+                for recipe in recipes {
+                    print("\tRecipe")
+                    print("\t\t\(recipe.name)")
+                    print("\t\t\tCategory: \(recipe.category?.name ?? "N/A")")
+                }
             }
             
-            print("RECIPEINGREDIENTS")
-            let recipeIngredients = try context.fetch(recipeIngredientDescriptor)
-            for recipeIngredient in recipeIngredients {
-                print("\tRecipeIngredient")
-                print("\t\t\(recipeIngredient.ingredient?.name ?? "N/A")")
-                print("\t\t\(recipeIngredient.quantity)")
-//                print("\t\t\(recipeIngredient.recipe?.name ?? "N/A")")
+            if (printAll || printRecipeIngredientsOnly) {
+                print("RECIPEINGREDIENTS")
+                let recipeIngredients = try context.fetch(recipeIngredientDescriptor)
+                for recipeIngredient in recipeIngredients {
+                    print("\tRecipeIngredient")
+                    if ((recipeIngredient.ingredient) != nil) {
+                        print("\t\t\(recipeIngredient.ingredient?.name ?? "N/A")")
+                    }
+                    print("\t\t\(recipeIngredient.quantity)")
+    //                print("\t\t\(recipeIngredient.recipe?.name ?? "N/A")")
+                }
             }
+
             
         } catch {
             print("NewStorageContainer printSampleData() Error printing data: \(error.localizedDescription)")
