@@ -3,7 +3,6 @@ import SwiftUI
 struct IngredientForm: View {
     enum Mode: Hashable {
         case add
-//        case edit(MockIngredient)
         case edit(Ingredient)
     }
     
@@ -24,7 +23,6 @@ struct IngredientForm: View {
     private let title: String
     @State private var name: String
     @State private var error: Error?
-//    @Environment(\.storage) private var storage
     @Environment(\.modelContext) var context
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isNameFocused: Bool
@@ -111,13 +109,13 @@ struct IngredientForm: View {
                 print("\tIngredient saved successfully")
 
             case .edit(let ingredient):
-//                try storage.updateIngredient(id: ingredient.id, name: name)
                 
                 ingredient.name = name
+                
                 print("\tIngredientform - editing ingredient: \(ingredient.name)")
+                
                 try context.save()
-//                print("IngredientForm - edit ingredient (needs implementation")
-//                print("\tIngredientform - editing ingredient: \(ingredient.name)")
+                
             }
             dismiss()
         } catch {

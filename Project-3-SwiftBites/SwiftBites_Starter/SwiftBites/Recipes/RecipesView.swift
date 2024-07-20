@@ -2,11 +2,10 @@ import SwiftUI
 import SwiftData
 
 struct RecipesView: View {
-//    @Environment(\.storage) private var storage
     @Environment(\.modelContext) var context
     @Query private var recipes: [Recipe]
     @State private var query = ""
-    @State private var sortOrder = /*SortDescriptor(\MockRecipe.name)*/ SortDescriptor(\Recipe.name)
+    @State private var sortOrder = SortDescriptor(\Recipe.name)
     
     var filteredRecipes: [Recipe] {
               let recipesPredicate = #Predicate<Recipe> {

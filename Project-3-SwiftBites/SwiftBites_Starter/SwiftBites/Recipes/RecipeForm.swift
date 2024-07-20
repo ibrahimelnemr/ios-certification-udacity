@@ -6,7 +6,6 @@ import Foundation
 struct RecipeForm: View {
     enum Mode: Hashable {
         case add
-//        case edit(MockRecipe)
         case edit(Recipe)
     }
     
@@ -43,16 +42,13 @@ struct RecipeForm: View {
     @State private var serving: Int
     @State private var time: Int
     @State private var instructions: String
-//    @State private var categoryId: MockCategory.ID?
     @State private var categoryId: Category.ID?
-//    @State private var ingredients: [MockRecipeIngredient]
     @State private var ingredients: [RecipeIngredient]
     @State private var imageItem: PhotosPickerItem?
     @State private var imageData: Data?
     @State private var isIngredientsPickerPresented =  false
     @State private var error: Error?
     @Environment(\.dismiss) private var dismiss
-//    @Environment(\.storage) private var storage
     @Environment(\.modelContext) var context
     @Query private var categories: [Category]
     
@@ -176,9 +172,9 @@ struct RecipeForm: View {
     private var categorySection: some View {
         Section {
             Picker("Category", selection: $categoryId) {
-                Text("None").tag(nil as /*MockCategory.ID?*/Category.ID?)
-                ForEach(/*storage.categories*/categories) { category in
-                    Text(category.name).tag(category.id as /*MockCategory.ID?*/Category.ID?)
+                Text("None").tag(nil as Category.ID?)
+                ForEach(categories) { category in
+                    Text(category.name).tag(category.id as Category.ID?)
                 }
             }
         }
@@ -276,12 +272,11 @@ struct RecipeForm: View {
     
     // MARK: - Data
     
-    func delete(recipe: Recipe/*MockRecipe*/) {
+    func delete(recipe: Recipe) {
         print("RecipeForm - delete()")
         guard case .edit(let recipe) = mode else {
             fatalError("Delete unavailable in add mode")
         }
-//        storage.deleteRecipe(id: recipe.id)
         
         print("\tRecipeForm - deleting recipe: \(recipe.name)")
         
@@ -300,9 +295,6 @@ struct RecipeForm: View {
             print(error.localizedDescription)
         }
         
-        
-//        print("RecipeForm - delete (needs implementation)")
-//        print("RecipeForm - deleted recipe \(recipe.name)")
         dismiss()
     }
     

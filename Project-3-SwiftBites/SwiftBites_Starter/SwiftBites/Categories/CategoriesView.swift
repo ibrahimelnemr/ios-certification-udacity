@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 
 struct CategoriesView: View {
-//    @Environment(\.storage) private var storage
     @Query private var categories: [Category]
     @Environment(\.modelContext) var context
     @State private var query = ""
@@ -44,10 +43,6 @@ struct CategoriesView: View {
                 .navigationDestination(for: RecipeForm.Mode.self) { mode in
                     RecipeForm(mode: mode)
                 }
-//            ForEach(categories) { category in
-//                Text(category.name)
-//                Text("test")
-//            }
         }
         
     }
