@@ -24,7 +24,6 @@ struct CategoryForm: View {
     private let title: String
     @State private var name: String
     @State private var error: Error?
-//    @Environment(\.storage) private var storage
     @Environment(\.modelContext) var context
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isNameFocused: Bool
@@ -69,9 +68,16 @@ struct CategoryForm: View {
     
     // MARK: - Data
     
-    private func deleteCategory(category: /*MockCategory*/Category) {
-//        storage.deleteCategory(id: category.id)
+    private func deleteCategory(category: Category) {
+        
         context.delete(category)
+        do {
+            try context.save()
+        }
+        catch {
+            self.error = error
+            print(error.localizedDescription)
+        }
         dismiss()
     }
     
