@@ -12,8 +12,3 @@ struct SwiftBitesApp: App {
         }
     }
 }
-
-#Preview {
-    ContentView()
-        .modelContainer(NewStorageContainer.create())
-}
