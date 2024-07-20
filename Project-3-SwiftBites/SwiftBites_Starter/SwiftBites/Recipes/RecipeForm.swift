@@ -317,6 +317,11 @@ struct RecipeForm: View {
         print("RecipeForm - save()")
         let category = categories.first(where: { $0.id == categoryId })
         
+        if ingredients.contains(where: { $0.quantity.isEmpty }) {
+            self.error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "All ingredients must have a quantity."])
+            return
+        }
+        
         do {
             switch mode {
             case .add:
