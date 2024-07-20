@@ -9,20 +9,22 @@ import SwiftUI
 
 class NewStorageContainer {
     @MainActor
-    static func create() -> ModelContainer {
+    static func create(deleteExistingData: Bool = false) -> ModelContainer {
         print("NewStorageContainer - create()")
         let schema = Schema([Category.self, Ingredient.self, RecipeIngredient.self, Recipe.self])
         let configuration = ModelConfiguration()
         let container = try! ModelContainer(for: schema, configurations: configuration)
-
-        if isEmpty(context: container.mainContext) {
+        
+        if (deleteExistingData) {
+            deleteSampleData(context: container.mainContext)
             loadSampleData(context: container.mainContext)
         }
-
-
-//        deleteSampleData(context: container.mainContext)
-//        loadSampleData(context: container.mainContext)
-
+        
+        else {
+            if isEmpty(context: container.mainContext) {
+                loadSampleData(context: container.mainContext)
+            }
+        }
 
         printSampleData(context: container.mainContext)
         
