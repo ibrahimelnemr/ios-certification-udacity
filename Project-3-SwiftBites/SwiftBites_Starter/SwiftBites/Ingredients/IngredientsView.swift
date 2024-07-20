@@ -152,9 +152,22 @@ struct IngredientsView: View {
     // MARK: - Data
     
     private func delete(ingredient: Ingredient/*MockIngredient*/) {
-//        storage.deleteIngredient(id: ingredient.id)
+        print("IngredientsView: delete()")
+        
+        print("\tAttempting to delete ingredient: \(ingredient.name)")
         context.delete(ingredient)
-        print("Ingredient deleted: \(ingredient.name)")
-//        print("IngredientsView - delete ingredient (needs implementation)")
+        
+        do {
+            print("\tAttempting to save context")
+            try context.save()
+        }
+        
+        catch {
+            print(error.localizedDescription)
+        }
+        
+        print("\tIngredient deleted: \(ingredient.name)")
+        
+        NewStorageContainer.printSampleData(context: context, printRecipeIngredientsOnly: true)
     }
 }
