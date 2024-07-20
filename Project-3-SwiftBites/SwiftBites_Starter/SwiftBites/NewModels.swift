@@ -13,7 +13,9 @@ final class Category: Identifiable, Hashable {
     
     var name: String
     
-    var recipes: [Recipe]?
+//    @Relationship(inverse: \Recipe.category)
+    @Relationship(deleteRule: .nullify, inverse: \Recipe.category)
+    var recipes: [Recipe] = []
     
     init(id: UUID = UUID(), name: String) {
         self.id = id
@@ -60,7 +62,7 @@ final class RecipeIngredient : Identifiable, Hashable {
     @Relationship(deleteRule: .nullify, inverse: \Ingredient.recipeIngredients)
     var ingredient: Ingredient?
     
-//    var recipe: Recipe?
+    var recipe: Recipe?
     
     var quantity: String
     
@@ -88,7 +90,8 @@ final class Recipe: Identifiable, Hashable {
     
     var summary: String
     
-    @Relationship(deleteRule: .nullify, inverse: \Category.recipes)
+//    @Relationship(deleteRule: .nullify, inverse: \Category.recipes)
+//    @Relationship(deleteRule: .nullify)
     var category: Category?
     
     var serving: Int
@@ -99,10 +102,10 @@ final class Recipe: Identifiable, Hashable {
     
     var imageData: Data?
     
-//    @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
-    @Relationship(deleteRule: .cascade)
+//    @Relationship(deleteRule: .cascade)
 //    @Relationship(inverse: \RecipeIngredient.recipe)
-    var ingredients: [RecipeIngredient]?
+    @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
+    var ingredients: [RecipeIngredient] = []
     
     init(
         id: UUID = UUID(),

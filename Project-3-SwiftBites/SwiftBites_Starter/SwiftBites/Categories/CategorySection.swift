@@ -8,7 +8,7 @@ struct CategorySection: View {
     var body: some View {
         Section(
             content: {
-                if category.recipes!.isEmpty {
+                if category.recipes.isEmpty {
                     empty
                 } else {
                     list
@@ -33,7 +33,7 @@ struct CategorySection: View {
     var list: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: 0) {
-                ForEach(category.recipes!, id: \.name) { recipe in
+                ForEach(category.recipes, id: \.name) { recipe in
                     RecipeCell(recipe: recipe)
                         .containerRelativeFrame(.horizontal, count: 12, span: 11, spacing: 0)
                 }
