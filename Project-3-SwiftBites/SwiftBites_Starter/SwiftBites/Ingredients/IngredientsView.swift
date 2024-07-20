@@ -45,10 +45,13 @@ struct IngredientsView: View {
                 .navigationTitle("Ingredients")
                 .toolbar {
 //                    if !storage.ingredients.isEmpty {
-                    if ingredients.isEmpty {
-                        NavigationLink(value: IngredientForm.Mode.add) {
-                            Label("Add", systemImage: "plus")
-                        }
+//                    if ingredients.isEmpty {
+//                        NavigationLink(value: IngredientForm.Mode.add) {
+//                            Label("Add", systemImage: "plus")
+//                        }
+//                    }
+                    NavigationLink(value: IngredientForm.Mode.add) {
+                        Label("Add", systemImage: "plus")
                     }
                 }
                 .navigationDestination(for: IngredientForm.Mode.self) { mode in
@@ -101,7 +104,7 @@ struct IngredientsView: View {
         .listRowSeparator(.hidden)
     }
     
-    private func list(for ingredients: [/*MockIngredient*/Ingredient]) -> some View {
+    private func list(for ingredients: [Ingredient]) -> some View {
         List {
             if ingredients.isEmpty {
                 noResults
