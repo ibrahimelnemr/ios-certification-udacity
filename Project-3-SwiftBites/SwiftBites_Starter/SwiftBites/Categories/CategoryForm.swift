@@ -81,6 +81,7 @@ struct CategoryForm: View {
             case .add:
                 let newCategory = Category(name: name)
                 try context.insert(newCategory)
+                try context.save()
 
             case .edit(let category):
                 category.name = name
