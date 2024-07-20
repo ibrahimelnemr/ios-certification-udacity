@@ -59,7 +59,7 @@ final class RecipeIngredient : Identifiable, Hashable {
     
     var ingredient: Ingredient?
     
-    var recipe: Recipe?
+//    var recipe: Recipe?
     
     var quantity: String
     
@@ -99,9 +99,10 @@ final class Recipe: Identifiable, Hashable {
     
     var imageData: Data?
     
-    @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
-//    @Relationship(deleteRule: .cascade)
-    var ingredients: [RecipeIngredient]
+//    @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
+    @Relationship(deleteRule: .cascade)
+//    @Relationship(inverse: \RecipeIngredient.recipe)
+    var ingredients: [RecipeIngredient]?
     
     init(
         id: UUID = UUID(),

@@ -30,7 +30,7 @@ struct RecipeForm: View {
             _serving = .init(initialValue: recipe.serving)
             _time = .init(initialValue: recipe.time)
             _instructions = .init(initialValue: recipe.instructions)
-            _ingredients = .init(initialValue: recipe.ingredients)
+            _ingredients = .init(initialValue: recipe.ingredients ?? [])
             _categoryId = .init(initialValue: recipe.category?.id)
             _imageData = .init(initialValue: recipe.imageData)
             
@@ -214,7 +214,7 @@ struct RecipeForm: View {
             } else {
                 ForEach(ingredients) { ingredient in
                     HStack(alignment: .center) {
-                        Text(ingredient.ingredient!.name)
+                        Text(ingredient.ingredient?.name ?? "")
                             .bold()
                             .layoutPriority(2)
                         Spacer()
@@ -277,13 +277,29 @@ struct RecipeForm: View {
     // MARK: - Data
     
     func delete(recipe: Recipe/*MockRecipe*/) {
+        print("RecipeForm - delete()")
         guard case .edit(let recipe) = mode else {
             fatalError("Delete unavailable in add mode")
         }
 //        storage.deleteRecipe(id: recipe.id)
         
-        print("RecipeForm - deleting recipe: \(recipe.name)")
-        try context.delete(recipe)
+        print("\tRecipeForm - deleting recipe: \(recipe.name)")
+        
+        do {
+            print("\tAttempting to delete recipe from context")
+            try context.delete(recipe)
+            print("\tAttempting to save context")
+            try context.save()
+            print("\t RecipeForm - printing all data in context")
+            
+            try NewStorageContainer.printSampleData(context: context)
+
+        }
+        catch {
+            print("RecipeForm - delete() ERROR")
+            print(error.localizedDescription)
+        }
+        
         
 //        print("RecipeForm - delete (needs implementation)")
 //        print("RecipeForm - deleted recipe \(recipe.name)")
