@@ -11,7 +11,6 @@ final class Category: Identifiable, Hashable {
     
     var id = UUID()
     
-//    @Attribute(.unique)
     var name: String
     
     var recipes: [Recipe]?
@@ -35,7 +34,6 @@ final class Category: Identifiable, Hashable {
 final class Ingredient: Identifiable, Hashable {
     var id = UUID()
     
-//    @Attribute(.unique)
     var name: String
     
     var recipeIngredients: [RecipeIngredient]?
@@ -86,7 +84,6 @@ final class Recipe: Identifiable, Hashable {
     
     var id = UUID()
     
-//    @Attribute(.unique)
     var name: String
     
     var summary: String
