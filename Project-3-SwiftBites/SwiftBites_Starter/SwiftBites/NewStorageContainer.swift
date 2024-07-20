@@ -298,15 +298,15 @@ class NewStorageContainer {
             serving: 4,
             time: 60,
             ingredients: [
-                RecipeIngredient(ingredient: driedChickpeas, quantity: "1 cup"),
-                RecipeIngredient(ingredient: onions, quantity: "1 medium, chopped"),
-                RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
-                RecipeIngredient(ingredient: cilantro, quantity: "1/2 cup, chopped"),
-                RecipeIngredient(ingredient: parsley, quantity: "1/2 cup, chopped"),
-                RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
-                RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
-                RecipeIngredient(ingredient: salt, quantity: "1 tsp"),
-                RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp")
+//                RecipeIngredient(ingredient: driedChickpeas, quantity: "1 cup"),
+//                RecipeIngredient(ingredient: onions, quantity: "1 medium, chopped"),
+//                RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
+//                RecipeIngredient(ingredient: cilantro, quantity: "1/2 cup, chopped"),
+//                RecipeIngredient(ingredient: parsley, quantity: "1/2 cup, chopped"),
+//                RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
+//                RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
+//                RecipeIngredient(ingredient: salt, quantity: "1 tsp"),
+//                RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp")
             ],
             instructions: "Soak chickpeas overnight. Blend with onions, garlic, herbs, and spices. Form into balls, add baking powder, and fry until golden.",
             imageData: UIImage(named: "falafel")?.pngData()
@@ -324,17 +324,17 @@ class NewStorageContainer {
 //            RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp", recipe: falafel)
 //        ]
         
-//        falafel.ingredients = [
-//            RecipeIngredient(ingredient: driedChickpeas, quantity: "1 cup"),
-//            RecipeIngredient(ingredient: onions, quantity: "1 medium, chopped"),
-//            RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
-//            RecipeIngredient(ingredient: cilantro, quantity: "1/2 cup, chopped"),
-//            RecipeIngredient(ingredient: parsley, quantity: "1/2 cup, chopped"),
-//            RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
-//            RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
-//            RecipeIngredient(ingredient: salt, quantity: "1 tsp"),
-//            RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp")
-//        ]
+        falafel.ingredients = [
+            RecipeIngredient(ingredient: driedChickpeas, quantity: "1 cup"),
+            RecipeIngredient(ingredient: onions, quantity: "1 medium, chopped"),
+            RecipeIngredient(ingredient: garlic, quantity: "3 cloves, minced"),
+            RecipeIngredient(ingredient: cilantro, quantity: "1/2 cup, chopped"),
+            RecipeIngredient(ingredient: parsley, quantity: "1/2 cup, chopped"),
+            RecipeIngredient(ingredient: cumin, quantity: "1 tsp"),
+            RecipeIngredient(ingredient: coriander, quantity: "1 tsp"),
+            RecipeIngredient(ingredient: salt, quantity: "1 tsp"),
+            RecipeIngredient(ingredient: bakingPowder, quantity: "1/2 tsp")
+        ]
 
         
         let shawarma = Recipe(
