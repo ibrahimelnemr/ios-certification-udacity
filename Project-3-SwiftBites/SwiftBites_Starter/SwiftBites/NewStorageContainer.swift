@@ -10,6 +10,7 @@ import SwiftUI
 class NewStorageContainer {
     @MainActor
     static func create() -> ModelContainer {
+        print("NewStorageContainer - create()")
         let schema = Schema([Category.self, Ingredient.self, RecipeIngredient.self, Recipe.self])
         let configuration = ModelConfiguration()
         let container = try! ModelContainer(for: schema, configurations: configuration)
@@ -19,10 +20,12 @@ class NewStorageContainer {
         // re-load sample data for testing
         deleteSampleData(context: container.mainContext)
         loadSampleData(context: container.mainContext)
+        printSampleData(context: container.mainContext)
         return container
     }
     
     private static func isEmpty(context: ModelContext) -> Bool {
+        print("NewStorageContainer - isEmpty()")
         let descriptor = FetchDescriptor<Category>()
         do {
             let existingCategories = try context.fetch(descriptor)
@@ -33,6 +36,7 @@ class NewStorageContainer {
     }
     
     private static func deleteSampleData(context: ModelContext) {
+        print("NewStorageContainer - deleteSampleData()")
         let categoryDescriptor = FetchDescriptor<Category>()
         let ingredientDescriptor = FetchDescriptor<Ingredient>()
         let recipeDescriptor = FetchDescriptor<Recipe>()
@@ -66,6 +70,71 @@ class NewStorageContainer {
         }
     }
 
+    private static func printSampleData(context: ModelContext) {
+        print("NewStorageContainer - printSampleData()")
+        let categoryDescriptor = FetchDescriptor<Category>()
+        let ingredientDescriptor = FetchDescriptor<Ingredient>()
+        let recipeDescriptor = FetchDescriptor<Recipe>()
+        let recipeIngredientDescriptor = FetchDescriptor<RecipeIngredient>()
+        
+        print("PRINTING SAMPLE DATA")
+        
+        do {
+            let categories = try context.fetch(categoryDescriptor)
+            
+            print("CATEGORIES")
+            for category in categories {
+                print("\tCategory")
+                print("\t\t\(category.name)")
+                for recipe in category.recipes ?? [] {
+                    print("\t\t\t\(recipe.name)")
+                }
+            }
+            
+            print("INGREDIENTS")
+            let ingredients = try context.fetch(ingredientDescriptor)
+            for ingredient in ingredients {
+                print("\tIngredient")
+                print("\t\t\(ingredient.name)")
+            }
+            
+            let recipes = try context.fetch(recipeDescriptor)
+            
+            print("RECIPES")
+            for recipe in recipes {
+                print("\tRecipe")
+                print("\t\t\(recipe.name)")
+                print("\t\t\tCategory: \(recipe.category?.name ?? "N/A")")
+            }
+            
+            print("RECIPEINGREDIENTS")
+            let recipeIngredients = try context.fetch(recipeIngredientDescriptor)
+            for recipeIngredient in recipeIngredients {
+                print("\tRecipeIngredient")
+                print("\t\t\(recipeIngredient.ingredient?.name ?? "N/A")")
+                print("\t\t\(recipeIngredient.quantity)")
+            }
+            
+        } catch {
+            print("NewStorageContainer printSampleData() Error printing data: \(error.localizedDescription)")
+        }
+    }
+    
+    private static func printRecipeIngredients(context: ModelContext) {
+        
+    }
+    
+    private static func printIngredients(context: ModelContext) {
+        
+    }
+    
+    private static func printCategories(context: ModelContext) {
+        
+    }
+    
+    private static func printRecipes(context: ModelContext) {
+        
+    }
     
     private static func loadSampleData(context: ModelContext) {
         let pizzaDough = Ingredient(name: "Pizza Dough")
