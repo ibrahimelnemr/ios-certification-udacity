@@ -14,22 +14,36 @@ class NewStorageContainer {
         let schema = Schema([Category.self, Ingredient.self, RecipeIngredient.self, Recipe.self])
         let configuration = ModelConfiguration()
         let container = try! ModelContainer(for: schema, configurations: configuration)
-//        if isEmpty(context: container.mainContext) {
-//            loadSampleData(context: container.mainContext)
-//        }
-        // re-load sample data for testing
-        deleteSampleData(context: container.mainContext)
-        loadSampleData(context: container.mainContext)
+
+        if isEmpty(context: container.mainContext) {
+            loadSampleData(context: container.mainContext)
+        }
+
+
+//        deleteSampleData(context: container.mainContext)
+//        loadSampleData(context: container.mainContext)
+
+
         printSampleData(context: container.mainContext)
+        
+        
+        
         return container
     }
     
     private static func isEmpty(context: ModelContext) -> Bool {
         print("NewStorageContainer - isEmpty()")
-        let descriptor = FetchDescriptor<Category>()
+        let categoryDescriptor = FetchDescriptor<Category>()
+        let ingredientDescriptor = FetchDescriptor<Ingredient>()
+        let recipeDescriptor = FetchDescriptor<Recipe>()
+        let recipeIngredientDescriptor = FetchDescriptor<RecipeIngredient>()
+        
         do {
-            let existingCategories = try context.fetch(descriptor)
-            return existingCategories.isEmpty
+            let existingCategories = try context.fetch(categoryDescriptor)
+            let existingIngredients = try context.fetch(ingredientDescriptor)
+            let existingRecipes = try context.fetch(recipeDescriptor)
+            let existingRecipeIngredients = try context.fetch(recipeIngredientDescriptor)
+            return existingCategories.isEmpty && existingIngredients.isEmpty && existingRecipes.isEmpty && existingRecipeIngredients.isEmpty
         } catch {
             return false
         }
