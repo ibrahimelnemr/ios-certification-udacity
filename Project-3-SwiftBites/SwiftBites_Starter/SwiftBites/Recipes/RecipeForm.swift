@@ -335,17 +335,21 @@ struct RecipeForm: View {
                 let recipe = Recipe (
                     name: name,
                     summary: summary,
-                    category: category,
+//                    category: category,
                     serving: serving,
                     time: time,
-                    ingredients: ingredients,
+//                    ingredients: ingredients,
                     instructions: instructions,
                     imageData: imageData
                 )
                 
+                recipe.category = category
+                recipe.ingredients = ingredients
+                
 //                recipe.ingredients = ingredients
                 
                 try context.insert(recipe)
+                try context.save()
                 
                 print("\tRecipeForm - successfully saved recipe with name: \(recipe.name)")
                 
@@ -381,6 +385,8 @@ struct RecipeForm: View {
             dismiss()
         } catch {
             self.error = error
+            print("RecipeForm - ERROR")
+            print(error.localizedDescription)
         }
     }
 }

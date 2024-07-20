@@ -111,7 +111,7 @@ final class Recipe: Identifiable, Hashable {
         id: UUID = UUID(),
         name: String,
         summary: String,
-        category: Category?,
+        category: Category? = nil,
         serving: Int,
         time: Int,
         ingredients: [RecipeIngredient] = [],
