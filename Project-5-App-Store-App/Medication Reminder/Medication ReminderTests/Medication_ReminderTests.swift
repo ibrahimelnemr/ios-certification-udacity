@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Medication_Reminder
+//@testable import Medication_Reminder
 
 final class Medication_ReminderTests: XCTestCase {
 
