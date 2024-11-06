@@ -67,57 +67,43 @@ struct IngredientForm: View {
     // MARK: - Data
     
     private func delete(ingredient: Ingredient) {
-        print("IngredientForm - delete()")
-        
         
         do {
-            print("\tAttempting to delete ingredient")
+            
             context.delete(ingredient)
             
-            print("\tAttempting to save context")
             try context.save()
             
-        } 
+        }
         
         catch {
             
             print(error.localizedDescription)
         }
         
-        print("\tIngredient deleted: \(ingredient.name)")
-        
-        print("Current RecipeIngredients: ")
-        NewStorageContainer.printSampleData(context: context, printRecipeIngredientsOnly: true)
-        
         dismiss()
     }
     
     private func save() {
-        print("IngredientForm - save()")
+        
         do {
+            
             switch mode {
+                
             case .add:
                 
-                print("\tAttempting to insert ingredient into context")
-                
-                try context.insert(Ingredient(name: name))
-                
-                print("\tAttempting to save context")
-                
+                context.insert(Ingredient(name: name))
                 try context.save()
                 
-                print("\tIngredient saved successfully")
-
             case .edit(let ingredient):
                 
                 ingredient.name = name
-                
-                print("\tIngredientform - editing ingredient: \(ingredient.name)")
-                
                 try context.save()
                 
             }
+            
             dismiss()
+            
         } catch {
             self.error = error
         }

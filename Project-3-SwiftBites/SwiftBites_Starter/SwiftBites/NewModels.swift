@@ -13,7 +13,6 @@ final class Category: Identifiable, Hashable {
     
     var name: String
     
-//    @Relationship(inverse: \Recipe.category)
     @Relationship(deleteRule: .nullify, inverse: \Recipe.category)
     var recipes: [Recipe] = []
     
@@ -90,8 +89,6 @@ final class Recipe: Identifiable, Hashable {
     
     var summary: String
     
-//    @Relationship(deleteRule: .nullify, inverse: \Category.recipes)
-//    @Relationship(deleteRule: .nullify)
     var category: Category?
     
     var serving: Int
@@ -102,8 +99,6 @@ final class Recipe: Identifiable, Hashable {
     
     var imageData: Data?
     
-//    @Relationship(deleteRule: .cascade)
-//    @Relationship(inverse: \RecipeIngredient.recipe)
     @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
     var ingredients: [RecipeIngredient] = []
     

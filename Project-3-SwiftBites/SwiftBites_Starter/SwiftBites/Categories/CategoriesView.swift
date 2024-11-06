@@ -54,13 +54,6 @@ struct CategoriesView: View {
         if categories.isEmpty {
             empty
         } else {
-//            list(for: categories.filter {
-//                if query.isEmpty {
-//                    return true
-//                } else {
-//                    return $0.name.localizedStandardContains(query)
-//                }
-//            })
             list(for: filteredCategories)
         }
     }

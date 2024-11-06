@@ -10,7 +10,7 @@ struct IngredientsView: View {
         self.selection = selection
     }
     
-    @Environment (\.modelContext) var context
+    @Environment(\.modelContext) var context
     @Query private var ingredients: [Ingredient]
     @Environment(\.dismiss) private var dismiss
     @State private var query = ""
@@ -43,11 +43,6 @@ struct IngredientsView: View {
             content
                 .navigationTitle("Ingredients")
                 .toolbar {
-//                    if ingredients.isEmpty {
-//                        NavigationLink(value: IngredientForm.Mode.add) {
-//                            Label("Add", systemImage: "plus")
-//                        }
-//                    }
                     NavigationLink(value: IngredientForm.Mode.add) {
                         Label("Add", systemImage: "plus")
                     }
@@ -65,13 +60,6 @@ struct IngredientsView: View {
         if ingredients.isEmpty {
             empty
         } else {
-//            list(for: /*storage.ingredients.filter*/ ingredients.filter {
-//                if query.isEmpty {
-//                    return true
-//                } else {
-//                    return $0.name.localizedStandardContains(query)
-//                }
-//            })
             list(for: filteredIngredients)
         }
     }
@@ -125,8 +113,6 @@ struct IngredientsView: View {
         if let selection {
             Button(
                 action: {
-                    print("IngredientsView - #ViewBuilder row()")
-                    print("\tCalling selection function for ingredient: \(ingredient.name)")
                     selection(ingredient)
                     dismiss()
                 },
@@ -149,21 +135,16 @@ struct IngredientsView: View {
     // MARK: - Data
     
     private func delete(ingredient: Ingredient) {
-        print("IngredientsView: delete()")
         
-        print("\tAttempting to delete ingredient: \(ingredient.name)")
         context.delete(ingredient)
         
         do {
-            print("\tAttempting to save context")
             try context.save()
         }
         
         catch {
             print(error.localizedDescription)
         }
-        
-        print("\tIngredient deleted: \(ingredient.name)")
         
         NewStorageContainer.printSampleData(context: context, printRecipeIngredientsOnly: true)
     }

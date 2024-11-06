@@ -90,17 +90,9 @@ struct RecipeForm: View {
     private func ingredientPicker() -> some View {
         IngredientsView { selectedIngredient in
             
-            print("RecipeForm - ingredientPicker()")
-            
-            print("\tSelected ingredient: \(selectedIngredient.name), ID: \(selectedIngredient.id)")
-                        
-            print("\tAttempting to create recipeIngredient with selectedIngredient")
-            
             let recipeIngredient = RecipeIngredient(quantity: "")
             
             recipeIngredient.ingredient = selectedIngredient
-            
-            print("\tRecipeForm - adding \(recipeIngredient.ingredient!.name) to recipe.")
             
             ingredients.append(recipeIngredient)
 
@@ -273,21 +265,16 @@ struct RecipeForm: View {
     // MARK: - Data
     
     func delete(recipe: Recipe) {
-        print("RecipeForm - delete()")
+    
         guard case .edit(let recipe) = mode else {
             fatalError("Delete unavailable in add mode")
         }
         
-        print("\tRecipeForm - deleting recipe: \(recipe.name)")
         
         do {
-            print("\tAttempting to delete recipe from context")
-            try context.delete(recipe)
-            print("\tAttempting to save context")
+
+            context.delete(recipe)
             try context.save()
-            print("\t RecipeForm - printing all data in context")
-            
-            try NewStorageContainer.printSampleData(context: context)
 
         }
         catch {
@@ -305,8 +292,6 @@ struct RecipeForm: View {
     }
     
     func save() {
-//        let category = storage.categories.first(where: { $0.id == categoryId })
-        print("RecipeForm - save()")
         let category = categories.first(where: { $0.id == categoryId })
         
         if ingredients.contains(where: { $0.quantity.isEmpty }) {
@@ -317,25 +302,11 @@ struct RecipeForm: View {
         do {
             switch mode {
             case .add:
-//                try storage.addRecipe(
-//                    name: name,
-//                    summary: summary,
-//                    category: category,
-//                    serving: serving,
-//                    time: time,
-//                    ingredients: ingredients,
-//                    instructions: instructions,
-//                    imageData: imageData
-//                )
-                
-                print("\tAttempting to create new recipe to save")
                 let recipe = Recipe (
                     name: name,
                     summary: summary,
-//                    category: category,
                     serving: serving,
                     time: time,
-//                    ingredients: ingredients,
                     instructions: instructions,
                     imageData: imageData
                 )
@@ -343,26 +314,10 @@ struct RecipeForm: View {
                 recipe.category = category
                 recipe.ingredients = ingredients
                 
-//                recipe.ingredients = ingredients
-                
-                try context.insert(recipe)
+                context.insert(recipe)
                 try context.save()
                 
-                print("\tRecipeForm - successfully saved recipe with name: \(recipe.name)")
-                
-//                print("RecipeForm - add recipe (needs implementation)")
             case .edit(let recipe):
-//                try storage.updateRecipe(
-//                    id: recipe.id,
-//                    name: name,
-//                    summary: summary,
-//                    category: category,
-//                    serving: serving,
-//                    time: time,
-//                    ingredients: ingredients,
-//                    instructions: instructions,
-//                    imageData: imageData
-//                )
                 
                 recipe.name = name
                 recipe.summary = summary
@@ -375,9 +330,6 @@ struct RecipeForm: View {
                 
                 try context.save()
                 
-                print("RecipeForm - editing recipe: \(recipe.name)")
-                
-//                print("RecipeForm - edit recipe (needs implementation)")
             }
             dismiss()
         } catch {
